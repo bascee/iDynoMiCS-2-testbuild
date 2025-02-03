@@ -7,11 +7,11 @@
 		<compartment name="chemostat">
 			<shape class="Dimensionless" volume="1 [L]">
 				<boundary  class="constantConcentrationToChemostat" volumeFlowRate="0.1 [L/h]">
-				<solute name="SulfuricAcid" 	concentration="0.1 [mol/m+3]"  />
+				<solute name="SulfuricAcid" 	concentration="0.001 [mol/L]"  />
 				</boundary>
 			</shape>
 			<solutes>
-				<solute name="SulfuricAcid" 	pKa="-3,1.99"	concentration="0.1 [mol/m+3]" defaultDiffusivity="1"  />
+				<solute name="SulfuricAcid" 	pKa="-3.0,1.988"	concentration="0.001 [mol/L]" defaultDiffusivity="1"  />
 			</solutes>
 			<reactions>
 			</reactions>

@@ -7,14 +7,15 @@
 		<compartment name="chemostat">
 			<shape class="Dimensionless" volume="1 [L]">
 				<boundary  class="constantConcentrationToChemostat" volumeFlowRate="0.1 [L/h]">
-				<solute name="Am" 	concentration="1.0 [mol/m+3]"  />
+				<solute name="Am" 	concentration="0.1 [mol/L]"  />
 				</boundary>
 			</shape>
 			<solutes>
-				<solute name="Am" 	pKa="9.25"	maxCharge="1.0" concentration="1.0 [mol/m+3]" defaultDiffusivity="1"  />
+				<solute name="Am" 	pKa="9.25"	maxCharge="1.0" concentration="0.1 [mol/L]" defaultDiffusivity="1"  />
 			</solutes>
 			<reactions>
 			</reactions>
+			
 			<agents>
 			</agents>
 			<processManagers>

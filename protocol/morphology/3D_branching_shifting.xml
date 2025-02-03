@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document>
-	<simulation name="Bud_transfer" outputfolder="../results" log="EXPRESSIVE" randomSeed="1234"
+	<simulation name="Bud_transfer" outputfolder="../results" log="EXPRESSIVE" randomSeed="12345"
 		comment="this is a file for testing purposes only.">
 		<!-- minutes -->
-		<timer stepSize="30.0 [min]" endOfSimulation="42 [day]" />
+		<timer stepSize="30.0 [min]" endOfSimulation="80 [day]" />
 		<speciesLib>
 			<species name="yeast_bud">
 				<speciesModule name="coccoid" />
@@ -130,7 +130,7 @@
 				<aspect name="differentiate" class="Differentiate" />
 				<aspect name="differentiationMap" class="InstantiableMap">
 					<map entryClass="String" keyType="String">
-						<item key="growthStop GT 0.99" value="yeast_old"  />
+						<item key="growthStop GT 0.9825" value="yeast_old"  />
 						<item key="parent == 1.0" value="yeast_mature"  />
 						<item key="parent == 0.0" value="yeast_bud"  />
 					</map>
@@ -141,14 +141,14 @@
 		<compartment name="Compartment3D">
 			<shape class="Cuboid" resolutionCalculator="MgFASResolution" nodeSystem="true">
 				<!-- µm -->
-				<dimension name="X" isCyclic="true" 	targetResolution="16.0" max="256.0"/>
-				<dimension name="Y" isCyclic="false" targetResolution="16.0" max="256.0">
+				<dimension name="X" isCyclic="true" 	targetResolution="16.0" max="512.0"/>
+				<dimension name="Y" isCyclic="false" targetResolution="16.0" max="512.0">
 					<boundary extreme="1" class="FixedBoundary" layerThickness="32.0">
 						<solute name="COD" concentration="1.0 [mg/l]" />
 						<solute name="oxygen" concentration="8.74 [mg/l]" />
 					</boundary>
 				</dimension>
-				<dimension name="Z" isCyclic="true" 	targetResolution="16.0" max="256.0"/>
+				<dimension name="Z" isCyclic="true" 	targetResolution="16.0" max="512.0"/>
 			</shape>
 			<solutes>
 				<solute name="COD"  	concentration="1.0 [mg/l]" defaultDiffusivity="2000.0 [um+2/s]" />
@@ -161,7 +161,7 @@
 					<aspect name="species" type="PRIMARY" class="String" value="yeast_bud" />
 					<aspect name="body" class="Body" >
 						<body morphology="COCCOID" >
-							<point position="128.0,128.0,128.0" />
+							<point position="256.0,2.0,256.0" />
 						</body>
 					</aspect>
 					<aspect  name="mass" class="InstantiableMap">

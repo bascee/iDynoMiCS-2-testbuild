@@ -1,51 +1,74 @@
 package solver;
 
-import compartment.EnvironmentContainer;
 import dataIO.Log;
-import expression.arithmetic.Unit;
-import grid.SpatialGrid;
 import optimization.functionImplementation.ObjectiveFunctionNonLinear;
 import optimization.functionImplementation.Options;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.ops.MatrixIO;
 import solvers.NonlinearEquationSolver;
-
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.Arrays;
+import java.util.concurrent.Callable;
 
-public class PHsolver {
+public class PHsolver implements Callable<PKstruct[]> {
 
-    // FIXME to make this robust can we build this directly from Idynomics.unitSystem?
-    Unit microUnit = new Unit("amol/um+3");
-    Unit siUnit = new Unit("mol/m+3");
+    private PKstruct[] pkSolutes;
 
-    public void PHSolver()
-    {
-
+    public PHsolver() {
     }
+
+    public PHsolver(PKstruct[] pkSolutes) {
+        this.pkSolutes = pkSolutes;
+    }
+
+    @Override
+    public PKstruct[] call() {
+        return solve(pkSolutes);
+    }
+
     public PKstruct[] solve(PKstruct[] pkSolutes) {
+        // Existing solve logic remains unchanged
+        normalizePKaValues(pkSolutes);
         int nVar = 2;
-        for ( PKstruct struct : pkSolutes ) {
-            if (struct.pKa != null )
-                nVar+=struct.pStates.length;
+
+        for (PKstruct struct : pkSolutes) {
+            if (struct.pKa != null) nVar += struct.pStates.length;
         }
+
         NonLinearFunction myFun = new NonLinearFunction();
         myFun.setPKstructs(pkSolutes);
         myFun.setInitial(pkSolutes);
-        NonlinearEquationSolver solver = chemTestnoLin(nVar,0, myFun);
-        double pH = -Math.log10(solver.getX().get(0,0) * siUnit.modifier());
 
+        NonlinearEquationSolver solver = chemTestnoLin(nVar, 0, myFun);
+        double pH = -Math.log10(solver.getX().get(0, 0));
         int i = 2;
+
         pkSolutes[0].conc = pH;
+
         for (PKstruct struct : pkSolutes) {
-            if( struct.pStates != null) {
-                for (int j=0; j < struct.pStates.length; j++)
+            if (struct.pStates != null) {
+                for (int j = 0; j < struct.pStates.length; j++) {
                     struct.pStates[j] = solver.getX().get(i++, 0);
+                }
             }
         }
         return pkSolutes;
+    }
+
+    public void normalizePKaValues(PKstruct[] pkStructs) {
+        double smallValue = 1E-1;
+        for (PKstruct pkStruct : pkStructs) {
+            if (pkStruct.pKa != null) {
+                for (int i = 0; i < pkStruct.pKa.length; i++) {
+                    if (pkStruct.pKa[i] < smallValue) {
+                        pkStruct.pKa[i] = smallValue;
+                    } else if (pkStruct.pKa[i] > 14.0-smallValue) {
+                        pkStruct.pKa[i] = 14.0-smallValue;
+                    }
+                }
+            }
+        }
     }
 
     public class NonLinearFunction implements ObjectiveFunctionNonLinear {
@@ -57,26 +80,60 @@ public class PHsolver {
         public void setPKstructs(PKstruct[] pkSolutes) {
             this._pkSolutes = pkSolutes;
         }
+
         public void setInitial(PKstruct[] pKsolutes) {
             int nvar = 2;
-            for ( PKstruct struct : _pkSolutes ) {
-                if (struct.pKa != null )
-                    nvar+=struct.pKa.length+1;
+            for (PKstruct struct : _pkSolutes) {
+                if (struct.pKa != null)
+                    nvar += struct.pKa.length + 1;
             }
             this.initial = new Double[nvar];
             int i = 0;
-            initial[i++] = (pKsolutes[0].conc == 7.0 ? 0.01 : Math.pow(10.0,-pKsolutes[0].conc) * microUnit.modifier() );
-            initial[i++] = (pKsolutes[0].conc == 7.0 ? 0.01 : Math.pow(10.0,-(14.0-pKsolutes[0].conc)) * microUnit.modifier() );
+            // Overestimating initial H and OH a bit when pH is completely unknown appears to help the solver.
+            initial[i++] = (pKsolutes[0].conc == 7.0 ? 1E-5 : Math.pow(10.0, -pKsolutes[0].conc));
+            initial[i++] = (pKsolutes[0].conc == 7.0 ? 1E-5 : Math.pow(10.0, -(14.0 - pKsolutes[0].conc)));
             for (PKstruct struct : pKsolutes) {
-                if( struct.pStates != null) {
+                if (struct.pStates != null) {
                     for (double d : struct.pStates)
                         initial[i++] = d;
                 }
             }
         }
 
+        public double getAdaptiveTolerance() {
+            double minConc = Arrays.stream(_pkSolutes).mapToDouble(s -> s.conc).min().orElse(1e-3);
+            return Math.min(0.001 * kw, minConc * 1e-10);
+        }
+
         public Double[] getInitial() {
             return initial;
+        }
+
+        public double[] calculateSpeciesConcentrations(PKstruct pkStruct, double hConcentration) {
+            int numStates = pkStruct.pKa.length + 1;
+            double[] pStates = new double[numStates];
+
+            double[] alpha = new double[numStates];
+            for (int i = 0; i < numStates; i++) {
+                double numerator = Math.pow(hConcentration, numStates - 1 - i);
+                for (int j = 0; j < i; j++) {
+                    numerator *= Math.pow(10, -pkStruct.pKa[j]);
+                }
+                double denominator = 0;
+                for (int j = 0; j < numStates; j++) {
+                    double term = Math.pow(hConcentration, numStates - 1 - j);
+                    for (int k = 0; k < j; k++) {
+                        term *= Math.pow(10, -pkStruct.pKa[k]);
+                    }
+                    denominator += term;
+                }
+                alpha[i] = numerator / denominator;
+            }
+
+            for (int i = 0; i < numStates; i++) {
+                pStates[i] = alpha[i] * pkStruct.conc;
+            }
+            return pStates;
         }
 
         @Override
@@ -91,7 +148,7 @@ public class PHsolver {
                 if( temp < 0.0 )
                     negs += temp;
             }
-            negs = negs*1E2;
+            negs = negs * 1E2;
             /* Water dissociation */
             double h = x.get(0, 0);
             double oh = x.get(1, 0);
@@ -102,8 +159,9 @@ public class PHsolver {
             for( PKstruct p : _pkSolutes) {
                 if (p.pStates != null) {
                     for (double d : p.pStates) {
+                        double[] pStateArray = calculateSpeciesConcentrations(p, h);
                         if (d == 0.0)
-                            initial[j] = p.conc / p.pStates.length;
+                            initial[j] = pStateArray[j];
                         else
                             initial[j] = d;
                         j++;
@@ -163,7 +221,6 @@ public class PHsolver {
     }
 
     public NonlinearEquationSolver chemTestnoLin( int numberOfVariables, int solver, NonLinearFunction f) {
-
         double now = System.nanoTime();
         DMatrixRMaj initialGuess = new DMatrixRMaj(numberOfVariables, 1);
         for (int i = 0; i < numberOfVariables; i++) {
@@ -174,11 +231,10 @@ public class PHsolver {
         options.setAnalyticalJacobian(false);
         options.setSaveIterationDetails(true);
         options.setAlgorithm(solver);
-        options.setAllTolerances(1e-15);
-        options.setMaxStep(2000);
-        options.setMaxIterations(2000);
+        options.setAllTolerances(1E-30);
+        options.setMaxStep(5_000); // min 5k in some cases
+        options.setMaxIterations(5_000); // could increase if we notice this doesn't work
         NonlinearEquationSolver nonlinearSolver = new NonlinearEquationSolver(f, options);
-
         nonlinearSolver.solve(new DMatrixRMaj(initialGuess));
         if(Log.shouldWrite(Log.Tier.EXPRESSIVE)) {
             Log.out(Log.Tier.EXPRESSIVE,"pH " + nonlinearSolver.getResults().toString() +

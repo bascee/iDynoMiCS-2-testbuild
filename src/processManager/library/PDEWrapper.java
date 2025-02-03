@@ -15,9 +15,7 @@ import boundary.Boundary;
 import boundary.WellMixedBoundary;
 import dataIO.Log;
 import dataIO.ObjectFactory;
-import grid.ArrayType;
 import idynomics.Global;
-import linearAlgebra.Vector;
 import org.w3c.dom.Element;
 
 import compartment.AgentContainer;
@@ -38,6 +36,15 @@ import solver.mgFas.Multigrid;
 import solver.mgFas.SolverGrid;
 import solver.mgFas.*;
 import utility.Helper;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * \brief wraps and runs PDE solver
@@ -184,7 +191,10 @@ public class PDEWrapper extends ProcessDiffusion {
     public void applyReactions(MultigridSolute[] sols, MultigridSolute[] specials, int resorder, SolverGrid[] reacGrid, double[] resolution,
                                double voxelVolume) {
         /* pH calculation */
-        applySpecialReactions(sols, specials, resorder);
+        if (Global.concurrent_calculation )
+            applySpecialReactionsConcurrent(sols, specials, resorder);
+        else
+            applySpecialReactions(sols, specials, resorder);
         applyEnvReactions(sols, resorder);
         for (Agent agent : this._agents.getAllAgents())
             applyAgentReactions(agent, sols, specials, resorder, reacGrid, resolution, voxelVolume);
@@ -402,6 +412,84 @@ public class PDEWrapper extends ProcessDiffusion {
                 setConc(specialGrid, pkSolutes[0].solute, coord, resorder, pkSolutes[0].conc);
             }
         }
+    }
+
+    protected void applySpecialReactionsConcurrent(MultigridSolute[] concGrid, MultigridSolute[] specialGrid, int resorder) {
+        Collection<SpatialGrid> solutes = this._environment.getSolutes();
+
+        // Create a fixed thread pool
+        ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        Map<IntegerArray, Future<PKstruct[]>> positionFutureMap = new HashMap<>();
+
+        for (IntegerArray position : concGrid[0].fetchCoords(resorder)) {
+            int numStructs = 1; // Count solutes with pKa
+            for (SpatialGrid s : solutes) {
+                if (s.getpKa() != null) numStructs++;
+            }
+
+            if (numStructs > 1) {
+                PKstruct[] pkSolutes = new PKstruct[numStructs];
+                int pkSol = 1;
+
+                // Populate pkSolutes array
+                for (SpatialGrid s : solutes) {
+                    if (s.getpKa() != null) {
+                        pkSolutes[pkSol] = new PKstruct();
+                        pkSolutes[pkSol].solute = s.getName();
+                        pkSolutes[pkSol].conc = getConc(concGrid, s.getName(), position.get(), resorder) / s.getMolarWeight();
+                        pkSolutes[pkSol].pKa = s.getpKa();
+                        pkSolutes[pkSol].maxCharge = s.getmaxCharge();
+                        pkSolutes[pkSol].pStates = new double[pkSolutes[pkSol].pKa.length + 1];
+
+                        int nPstate = 0;
+                        while (nPstate < pkSolutes[pkSol].pStates.length) {
+                            SpatialGrid spec = this._environment.getSpecialGrid(pkSolutes[pkSol].solute + "___" + nPstate);
+                            pkSolutes[pkSol].pStates[nPstate] = getConc(specialGrid, spec.getName(), position.get(), resorder);
+                            nPstate++;
+                        }
+                        pkSol++;
+                    }
+                }
+
+                // Create a new PKstruct for pH
+                pkSolutes[0] = new PKstruct();
+                pkSolutes[0].solute = "pH";
+                pkSolutes[0].conc = getConc(specialGrid, pkSolutes[0].solute, position.get(), resorder);
+
+                // Submit task to executor
+                Future<PKstruct[]> future = executorService.submit(new PHsolver(pkSolutes));
+                positionFutureMap.put(position, future);
+
+            }
+        }
+
+        // Collect results from futures
+        for (Map.Entry<IntegerArray, Future<PKstruct[]>> entry : positionFutureMap.entrySet()) {
+            IntegerArray position = entry.getKey();
+            Future<PKstruct[]> future = entry.getValue();
+
+            try {
+                PKstruct[] resultPkStructs = future.get();
+
+                // Store results back into specialGrid
+                for (int i = 1; i < resultPkStructs.length; i++) { // Skip the first element which is pH
+                    int nPstate = 0;
+                    while (nPstate < resultPkStructs[i].pStates.length) {
+                        SpatialGrid spec = this._environment.getSpecialGrid(resultPkStructs[i].solute + "___" + nPstate);
+                        setConc(specialGrid, spec.getName(), position.get(), resorder, resultPkStructs[i].pStates[nPstate]);
+                        nPstate++;
+                    }
+                }
+
+                // Store pH value
+                setConc(specialGrid, resultPkStructs[0].solute, position.get(), resorder, resultPkStructs[0].conc);
+
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace(); // Handle exceptions appropriately
+            }
+        }
+
+        executorService.shutdown(); // Shutdown executor service after all tasks are done
     }
 
     private Double getConc(MultigridSolute[] concGrid, String s, int[] coord, int resorder) {

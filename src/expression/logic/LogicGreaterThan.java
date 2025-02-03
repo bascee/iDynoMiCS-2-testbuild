@@ -3,12 +3,13 @@ package expression.logic;
 import java.util.Map;
 
 import aspect.AspectInterface;
+import expression.Component;
 import expression.ComponentBoolean;
 import expression.Elemental;
 
 public class LogicGreaterThan extends ComponentBoolean {
 
-	public LogicGreaterThan(Elemental a, Elemental b) 
+	public LogicGreaterThan(Elemental a, Elemental b)
 	{		
 		super(a, b);
 		this._expr = ">";

@@ -344,8 +344,14 @@ public class Compartment implements CanPrelaunchCheck, Instantiable, Settable, C
 			new SpatialGrid( e, this.environment);
 		}
 
+		Element specials = XmlHandler.findUniqueChild(xmlElem, XmlRef.grids);
+		for ( Element e : XmlHandler.getElements(specials, XmlRef.solute))
+		{
+			new SpatialGrid(e, this.environment, true);
+		}
+
 		/*
-		 * load special grids
+		 * create missing special grids
 		 */
 		/* FIXME could be refined */
 		for ( SpatialGrid s : environment.getSolutes() )
@@ -505,7 +511,7 @@ public class Compartment implements CanPrelaunchCheck, Instantiable, Settable, C
 	/**
 	 * \brief Add the given agent to this compartment.
 	 * 
-	 * @param Agent Agent to add.
+	 * @param agent Agent to add.
 	 */
 	public void addAgent(Agent agent)
 	{
@@ -598,7 +604,7 @@ public class Compartment implements CanPrelaunchCheck, Instantiable, Settable, C
 	/**
 	 * This method gets a list of arriving agents that originated in a
 	 * particular compartment. It is typically called by arrival processes.
-	 * @param originatingCompartment
+	 * @param origin
 	 * @return
 	 */
 	public LinkedList<Agent> getArrivals (String origin)

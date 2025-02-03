@@ -7,15 +7,15 @@
 		<compartment name="chemostat">
 			<shape class="Dimensionless" volume="1 [L]">
 				<boundary  class="constantConcentrationToChemostat" volumeFlowRate="0.1 [L/h]">
-				<solute name="f" 	concentration="0.1 [mol/m+3]"  />
-				<solute name="cn" 	concentration="0.1 [mol/m+3]"  />
-				<solute name="a" 	concentration="0.1 [mol/m+3]"  />
+				<solute name="f" 	concentration="0.1 [mol/L]"  />
+				<solute name="cn" 	concentration="0.1 [mol/L]"  />
+				<solute name="a" 	concentration="0.1 [mol/L]"  />
 				</boundary>
 			</shape>
 			<solutes>
-				<solute name="f" 	pKa="3.142667504"	concentration="0.1 [mol/m+3]" defaultDiffusivity="1"  />
-				<solute name="cn"	pKa="9.207608311" 	concentration="0.1 [mol/m+3]" defaultDiffusivity="1"  />
-				<solute name="a" 	pKa="9.795880017"	concentration="0.1 [mol/m+3]" defaultDiffusivity="1"  />
+				<solute name="f" 	pKa="3.142667504"	concentration="0.1 [mol/L]" defaultDiffusivity="1"  />
+				<solute name="cn"	pKa="9.207608311" 	concentration="0.1 [mol/L]" defaultDiffusivity="1"  />
+				<solute name="a" 	pKa="9.795880017"	concentration="0.1 [mol/L]" defaultDiffusivity="1"  />
 			</solutes>
 			<reactions>
 			</reactions>

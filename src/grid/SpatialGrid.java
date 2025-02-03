@@ -208,9 +208,9 @@ public class SpatialGrid implements Settable, Instantiable
 	
 	/**
 	 * NOTE Only used by unit tests, consider restructuring tests
-	 * @param shape
 	 * @param name
-	 * @param environment
+	 * @param concentration
+	 * @param parent
 	 */
 	public SpatialGrid(String name, double concentration, Settable parent)
 	{
@@ -227,12 +227,21 @@ public class SpatialGrid implements Settable, Instantiable
 	{
 		this.instantiate(xmlElem, parent);
 	}
+
+	public SpatialGrid(Element xmlElem, Settable parent, boolean special)
+	{
+		this.instantiate(xmlElem, parent, special);
+	}
 	
 	public SpatialGrid() { 
 		
 	}
 
 	public void instantiate(Element xmlElem, Settable parent)
+	{
+		instantiate(xmlElem, parent, false);
+	}
+	public void instantiate(Element xmlElem, Settable parent, boolean special)
 	{
 		/* Set associated object, naming and initial values */
 		this._shape = ((EnvironmentContainer) parent).getShape();
@@ -250,43 +259,42 @@ public class SpatialGrid implements Settable, Instantiable
 					Idynomics.unitSystem ));
 		else
 			this.setTo(ArrayType.CONCN, conc);
-	
-		
-		((EnvironmentContainer) parent).addSolute(this);
-		
-		/* Set default and biofilm diffusivity */
+
+		/* Set default and biofilm diffusivity FIXME theoretically this next part is not needed for special grids */
 		Double diffusivity = XmlHandler.gatherDouble(xmlElem,
 				XmlRef.defaultDiffusivity);
-		this._defaultDiffusivity = Double.valueOf(Helper.setIfNone(diffusivity,1.0));
+		this._defaultDiffusivity = Double.valueOf(Helper.setIfNone(diffusivity, 1.0));
 		diffusivity = XmlHandler.gatherDouble(xmlElem,
 				XmlRef.biofilmDiffusivity);
-		
+
 		/* identify whether biofilm diffusivity should be considered identical
 		 * to default diffusivity (in this case there is no need to identify
 		 * the biofilm region */
-		if ( diffusivity == null || diffusivity == this._defaultDiffusivity )
-		{
+		if (diffusivity == null || diffusivity == this._defaultDiffusivity) {
 			this._diffusivity = DiffusivityType.ALL_SAME;
 			this._biofilmDiffusivity = this._defaultDiffusivity;
-		}
-		else
-		{
+		} else {
 			this._biofilmDiffusivity = diffusivity;
 			this._diffusivity = DiffusivityType.BIOMASS_SCALED;
 		}
+	
+		if(special)
+			((EnvironmentContainer) parent).addSpecial(this);
+		else {
+			((EnvironmentContainer) parent).addSolute(this);
 
-		String temp = XmlHandler.gatherAttribute(xmlElem, XmlRef.pKa);
-		this._pKa = (Helper.isNullOrEmpty(temp) ? null : (double[]) ObjectFactory.loadObject( temp,
-				double[].class.getSimpleName() ));
+			String temp = XmlHandler.gatherAttribute(xmlElem, XmlRef.pKa);
+			this._pKa = (Helper.isNullOrEmpty(temp) ? null : (double[]) ObjectFactory.loadObject(temp,
+					double[].class.getSimpleName()));
 
-		temp = XmlHandler.gatherAttribute(xmlElem, XmlRef.maxCharge);
-		this._maxCharge = (Helper.isNullOrEmpty(temp) ? _defaultCharge : (double) ObjectFactory.loadObject( temp,
-				double.class.getSimpleName() ));
+			temp = XmlHandler.gatherAttribute(xmlElem, XmlRef.maxCharge);
+			this._maxCharge = (Helper.isNullOrEmpty(temp) ? _defaultCharge : (double) ObjectFactory.loadObject(temp,
+					double.class.getSimpleName()));
 
-		temp = XmlHandler.gatherAttribute(xmlElem, XmlRef.molarWeight);
-		this._molarWeight = (Helper.isNullOrEmpty(temp) ? _defaultMolarWeight : (double) ObjectFactory.loadObject( temp,
-				double.class.getSimpleName() ));
-		
+			temp = XmlHandler.gatherAttribute(xmlElem, XmlRef.molarWeight);
+			this._molarWeight = (Helper.isNullOrEmpty(temp) ? _defaultMolarWeight : (double) ObjectFactory.loadObject(temp,
+					double.class.getSimpleName()));
+		}
 		// TODO threshold
 	}
 

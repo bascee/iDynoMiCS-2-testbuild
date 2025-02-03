@@ -7,11 +7,11 @@
 		<compartment name="chemostat">
 			<shape class="Dimensionless" volume="1 [L]">
 				<boundary  class="constantConcentrationToChemostat" volumeFlowRate="0.1 [L/h]">
-				<solute name="carbonicAcid" 	concentration="0.001 [mol/m+3]"  />
+				<solute name="carbonicAcid" 	concentration="0.001 [mol/L]"  />
 				</boundary>
 			</shape>
 			<solutes>
-				<solute name="carbonicAcid" 	pKa="6.35,10.33"	concentration="0.001 [mol/m+3]" defaultDiffusivity="1"  />
+				<solute name="carbonicAcid" 	pKa="6.35,10.33"	concentration="0.001 [mol/L]" defaultDiffusivity="1"  />
 			</solutes>
 			<reactions>
 			</reactions>
