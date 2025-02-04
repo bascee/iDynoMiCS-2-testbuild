@@ -721,9 +721,9 @@ public class AspectRef
 
 	public static final String recipientType = "recipientType";
 
-	public static String youngsModulus = "youngsModulus";
+	public static final String youngsModulus = "youngsModulus";
 
-	public static String poissonRatio = "poissonRatio";
+	public static final String poissonRatio = "poissonRatio";
 
 	public static final String volumeChange = "volumeChange";
 
@@ -735,7 +735,7 @@ public class AspectRef
 
 	public static final String thresholdVolume = "thresholdVolume";
 
-	public static String centerPointRemoval = "centerPointRemoval";
+	public static final String centerPointRemoval = "centerPointRemoval";
 
 	public static final String tranferMassType = "tranferMassType";
 
@@ -743,5 +743,5 @@ public class AspectRef
 
 	public static final String massTransferLimit = "massTransferLimit";
 
-	public static String agentMassTransfer = "agentMassTransfer";
+	public static final String agentMassTransfer = "agentMassTransfer";
 }

@@ -13,13 +13,9 @@ import dataIO.Log.Tier;
  * @author Robert Clegg (r.j.clegg@bham.ac.uk) University of Birmingham, U.K.
  * @author Sankalp Arya (sankalp.arya@nottingham.ac.uk) University of Nottingham, U.K.
  */
-public class XmlRef
-{
+public class XmlRef {
 
-
-
-    public static String[] getAllOptions()
-	{
+    public static String[] getAllOptions() {
 		Field[] fields = XmlRef.class.getFields();
 		String[] options = new String[fields.length];
 		int i = 0;
@@ -593,7 +589,7 @@ public class XmlRef
 	/**
 	 * Indicates sub folder (set for SA or GA).
 	 */
-	public final static String subFolder = "subfolder";
+	public static final String subFolder = "subfolder";
 
 	/**
 	 * Number of global time steps to skip for next xml out
