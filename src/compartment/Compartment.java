@@ -279,6 +279,7 @@ public class Compartment implements CanPrelaunchCheck, Instantiable, Settable, C
 		 */
 		Spawner spawner;
 		TreeMap<Integer,Spawner> spawners = new TreeMap<Integer,Spawner>();
+		List<Spawner> spawnerList = new LinkedList<Spawner>();
 		for ( Element e : XmlHandler.getElements( xmlElem, XmlRef.spawnNode) )
 		{
 			if ( e.hasAttribute( XmlRef.classAttribute ) )
@@ -295,13 +296,15 @@ public class Compartment implements CanPrelaunchCheck, Instantiable, Settable, C
 								+ "by simulator.");
 				}
 				spawners.put(priority, spawner);
+				spawnerList.add(spawner);
 			}
 		}
 
-		/* verify whether this always returns in correct order (it should) */
+
+		Collections.sort(spawnerList, new Spawner.spawnComparator());
 		for( Spawner s : spawners.values() )
 			s.spawn();
-
+		
 		if( Log.shouldWrite(Tier.EXPRESSIVE))
 			Log.out(Tier.EXPRESSIVE, "Compartment " + this.name + 
 					" initialised with " + this.agents.getNumAllAgents() +
@@ -309,6 +312,7 @@ public class Compartment implements CanPrelaunchCheck, Instantiable, Settable, C
 
 
 		Element agents = XmlHandler.findUniqueChild(xmlElem, XmlRef.agents);
+
 		/*
 		 * Potential imports
 		 */
@@ -320,16 +324,15 @@ public class Compartment implements CanPrelaunchCheck, Instantiable, Settable, C
 			}
 		}
 
-
 		/*
 		 * Read in agents.
 		 */
 			for (Element a : XmlHandler.getElements(agents, XmlRef.agent)) {
 				this.agents.addAgent(new Agent(a, this), true);
 			}
-
+		
 		this.agents.update();
-
+		
 		if( Log.shouldWrite(Tier.EXPRESSIVE))
 			Log.out(Tier.EXPRESSIVE, "Compartment "+this.name+" initialised with "+ 
 					this.agents.getNumAllAgents()+" agents");
