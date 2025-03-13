@@ -10,13 +10,22 @@ import java.util.Map;
 
 public class Trapezoid extends ComponentMultiple {
 
+    /**
+     * /brief: The trapezoid, placed with the long edge on the x-axis and a height of 1.0, is used to calculate the
+     * height of the trapezoid at location x.
+     *
+     * One use case for the trapezoid is to scale activity based on a input variable x, for example pH.
+     *
+     * The first input (component a) is the queried x value, the following inputs (ConstantVector b) are the
+     * x-position of the 4 corners of the trapezoid from lowest x-position to highest.
+     */
 	public Trapezoid(Component a, ConstantVector b) {
         super();
         ArrayList<Component> comps = new ArrayList<Component>();
             comps.add(a);
             comps.addAll(b.getAllComponents());
             this._components = comps;
-            this._expr = " CORNER ";
+            this._expr = " TRAPEZOID ";
         }
 
     public Trapezoid(ArrayList<Component> comps) {
@@ -43,23 +52,27 @@ public class Trapezoid extends ComponentMultiple {
             return out;
         }
 
-        @Override
+    /**
+     * /brief: The trapezoid, placed with the long edge on the x-axis and a height of 1.0, returns the height of
+     * the trapezoid at location x.
+     */
+    @Override
         protected double calculateValue(Map<String, Double> variables)
         {
-            double pH = this._components.get(0).getValue(variables);
+            double x = this._components.get(0).getValue(variables);
             double a = this._components.get(1).getValue(variables);
             double b = this._components.get(2).getValue(variables);
             double c = this._components.get(3).getValue(variables);
             double d = this._components.get(4).getValue(variables);
 
-            if (pH <= a || pH >= d) {
+            if (x <= a || x >= d) {
                 return 0.0;
-            } else if (pH >= b && pH <= c) {
+            } else if (x >= b && x <= c) {
                 return 1.0;
-            } else if (pH > a && pH < b) {
-                return (pH - a) / (b - a);
+            } else if (x > a && x < b) {
+                return (x - a) / (b - a);
             } else {
-                return (d - pH) / (d - c);
+                return (d - x) / (d - c);
             }
         }
 
@@ -68,23 +81,27 @@ public class Trapezoid extends ComponentMultiple {
         return null;
     }
 
+    /**
+     * /brief: The trapezoid, placed with the long edge on the x-axis and a height of 1.0, returns the height of
+     * the trapezoid at location x.
+     */
     @Override
         public Object evaluate(AspectInterface subject)
         {
-            double pH = (double) this._components.get(0).evaluate(subject);
+            double x = (double) this._components.get(0).evaluate(subject);
             double a = (double) this._components.get(1).evaluate(subject);
             double b = (double) this._components.get(2).evaluate(subject);
             double c = (double) this._components.get(3).evaluate(subject);
             double d = (double) this._components.get(4).evaluate(subject);
 
-            if (pH <= a || pH >= d) {
+            if (x <= a || x >= d) {
                 return 0.0;
-            } else if (pH >= b && pH <= c) {
+            } else if (x >= b && x <= c) {
                 return 1.0;
-            } else if (pH > a && pH < b) {
-                return (pH - a) / (b - a);
+            } else if (x > a && x < b) {
+                return (x - a) / (b - a);
             } else {
-                return (d - pH) / (d - c);
+                return (d - x) / (d - c);
             }
         }
     }
