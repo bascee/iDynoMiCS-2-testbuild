@@ -180,7 +180,7 @@ public class Multigrid
 		for ( SpatialGrid s : environment.getSolutes() )
 			_soluteList.add( new SoluteGrid(domain, s.getName(), s, null ));
 
-		for ( SpatialGrid s : environment.getSpesials() )
+		for ( SpatialGrid s : environment.getSpecials() )
 			_specialList.add( new SoluteGrid(domain, s.getName(), s, null ));
 
 		/* Now for each solver, reactions are specified. Add these reactions
@@ -201,7 +201,7 @@ public class Multigrid
 		allReac = new SoluteGrid[nSolute];
 		allDiffReac = new SoluteGrid[nSolute];
 
-		int nSpecial = this._environment.getSpesials().size();
+		int nSpecial = this._environment.getSpecials().size();
 		this._specials = new MultigridSolute[nSpecial];
 
 		/* TODO: here both bLayer and diffusivity initiate from the same grid like in iDyno 1
@@ -221,7 +221,7 @@ public class Multigrid
 		}
 
 		int j = 0;
-		for (SpatialGrid s: environment.getSpesials())
+		for (SpatialGrid s: environment.getSpecials())
 		{
 			sBulk = s.getAverage(ArrayType.CONCN);
 			_specials[j] = new MultigridSolute(_specialList.get(j),

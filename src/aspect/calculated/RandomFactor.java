@@ -12,14 +12,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * \brief TODO
+ * \brief A uniformly distributed random number in [0,1).
  * 
  * @author Bastiaan Cockx @BastiaanCockx (baco@env.dtu.dk), DTU, Denmark
- * 
- * Input: volume
  *
- * This should only be used to model 3 dimensional spherical cells in 3D or
- * "2.5D" compartments. To model "flat" coccoid cells, use CylinderRadius
  */
 public class RandomFactor extends Calculated {
 	public RandomFactor()

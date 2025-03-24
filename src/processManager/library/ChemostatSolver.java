@@ -21,7 +21,6 @@ import reaction.Reaction;
 import reaction.RegularReaction;
 import referenceLibrary.AspectRef;
 import solver.*;
-import solver.mgFas.SoluteGrid;
 import utility.Helper;
 
 /**
@@ -307,7 +306,7 @@ public class ChemostatSolver extends ProcessManager
 				for( int i = 0; i < _n; i++ )
 					soluteMap.put( _solutes[i], y[i]/y[_n] );
 				HashMap<String, Double> specialMap = new HashMap<String, Double>();
-				for( SpatialGrid s : environment.getSpesials())
+				for( SpatialGrid s : environment.getSpecials())
 					specialMap.put(s.getName(),s.getAverage(ArrayType.CONCN));
 
 				/*

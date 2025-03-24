@@ -242,7 +242,7 @@ public class EnvironmentContainer implements CanPrelaunchCheck, Settable
 	}
 
 
-	public Collection<SpatialGrid> getSpesials()
+	public Collection<SpatialGrid> getSpecials()
 	{
 		return this._special;
 	}
