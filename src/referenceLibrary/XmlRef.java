@@ -13,12 +13,9 @@ import dataIO.Log.Tier;
  * @author Robert Clegg (r.j.clegg@bham.ac.uk) University of Birmingham, U.K.
  * @author Sankalp Arya (sankalp.arya@nottingham.ac.uk) University of Nottingham, U.K.
  */
-public class XmlRef
-{
+public class XmlRef {
 
-
-	public static String[] getAllOptions()
-	{
+    public static String[] getAllOptions() {
 		Field[] fields = XmlRef.class.getFields();
 		String[] options = new String[fields.length];
 		int i = 0;
@@ -90,7 +87,8 @@ public class XmlRef
 	 * Indicates a solute.
 	 */
 	public final static String solute = "solute";
-	
+
+
 	/**
 	 * Method for setting the diffusivity array of a solute's spatial grid.
 	 */
@@ -349,7 +347,21 @@ public class XmlRef
 	 * Indicates a solute concentration.
 	 */
 	public final static String concentration = "concentration";
-	
+
+	/**
+	 * Indicates pKa value(s) of solute.
+	 */
+	public final static String pKa = "pKa";
+
+	/**
+	 * Indicates the charge of the fully protonated form of the solute.
+	 */
+	public final static String maxCharge = "maxCharge";
+
+	/**
+	 * Molar weight of the solute.
+	 */
+	public final static String molarWeight = "molarWeight";
 	
 	/**
 	 * The name of the compartment from which an arrivals lounge originates
@@ -408,6 +420,9 @@ public class XmlRef
 	 * TODO
 	 */
 	public final static String solutes = "solutes";
+
+
+	public final static String grids = "grids";
 
 	/**
 	 * Seed for the random number generator.
@@ -574,7 +589,7 @@ public class XmlRef
 	/**
 	 * Indicates sub folder (set for SA or GA).
 	 */
-	public final static String subFolder = "subfolder";
+	public static final String subFolder = "subfolder";
 
 	/**
 	 * Number of global time steps to skip for next xml out
@@ -688,5 +703,7 @@ public class XmlRef
 	public static String forceFunction = "forceFunction";
 
 	public static String collisionDictionary = "collisionDictionary";
+
+	public static String partnerMap = "partnerMap";
 
 }

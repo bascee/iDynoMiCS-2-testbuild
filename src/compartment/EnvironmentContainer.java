@@ -46,6 +46,11 @@ public class EnvironmentContainer implements CanPrelaunchCheck, Settable
 	 * Collection of solutes (each SpatialGrid knows its own name).
 	 */
 	protected Collection<SpatialGrid> _solutes = new LinkedList<SpatialGrid>();
+
+	/**
+	 * Special grids (each SpatialGrid knows its own name).
+	 */
+	protected Collection<SpatialGrid> _special = new LinkedList<SpatialGrid>();
 	/**
 	 * Collection of extracellular reactions specific to this compartment
 	 * (each Reaction knows its own name).
@@ -82,18 +87,29 @@ public class EnvironmentContainer implements CanPrelaunchCheck, Settable
 	 */
 	public void addSolute(SpatialGrid solute)
 	{
-		if (this.getSoluteNames().contains(solute.getName()))
+		this.addGrid(solute, this._solutes);
+	}
+
+	public void addSpecial(SpatialGrid specialGrid)
+	{
+		this.addGrid(specialGrid, this._special);
+	}
+
+	private void addGrid(SpatialGrid grid, Collection<SpatialGrid> collection)
+	{
+		if (this.getGridNames(collection).contains(grid.getName()))
 		{
 			if( Log.shouldWrite(Tier.CRITICAL))
-				Log.out(Tier.CRITICAL, 
-						"Warning: Two or more solute grids with same name \""+
-								solute.getName()+"\"");
+				Log.out(Tier.CRITICAL,
+						"Warning: Two or more grids with same name \""+
+								grid.getName()+"\"");
 		}
-		this._solutes.add(solute);
+		collection.add(grid);
 		if( Log.shouldWrite(Tier.EXPRESSIVE))
-			Log.out(Tier.EXPRESSIVE, 
-					"Added solute \""+ solute.getName() +"\" to environment");
+			Log.out(Tier.EXPRESSIVE,
+					"Added \""+ grid.getName() +"\" to environment");
 	}
+
 	
 	/**
 	 * \brief Add a new solute to the environment. This method is intended only
@@ -107,6 +123,13 @@ public class EnvironmentContainer implements CanPrelaunchCheck, Settable
 		SpatialGrid sg = new SpatialGrid(this._shape, soluteName, this);
 		sg.newArray(CONCN, initialConcn);
 		this.addSolute(sg);
+	}
+
+	public void addSpecial(String gridName, double initialvalue)
+	{
+		SpatialGrid sg = new SpatialGrid(this._shape, gridName, this);
+		sg.newArray(CONCN, initialvalue);
+		this.addSpecial(sg);
 	}
 	
 	/**
@@ -146,8 +169,13 @@ public class EnvironmentContainer implements CanPrelaunchCheck, Settable
 	 */
 	public Collection<String> getSoluteNames()
 	{
+		return getGridNames(this._solutes);
+	}
+
+	private Collection<String> getGridNames(Collection<SpatialGrid> collection)
+	{
 		Collection<String> out = new LinkedList<String>();
-		for ( SpatialGrid sg : this._solutes )
+		for ( SpatialGrid sg : collection )
 			out.add(sg.getName());
 		return out;
 	}
@@ -162,13 +190,22 @@ public class EnvironmentContainer implements CanPrelaunchCheck, Settable
 	 */
 	public SpatialGrid getSoluteGrid(String soluteName)
 	{
-		for ( SpatialGrid sg : this._solutes )
-			if ( sg.getName().equals(soluteName) )
-				return sg;
+		return this.getGrid(soluteName, this._solutes );
+	}
+
+	public SpatialGrid getSpecialGrid(String name)
+	{
+		return this.getGrid(name, this._special );
+	}
+
+	private SpatialGrid getGrid(String name, Collection<SpatialGrid> collection)
+	{
+		for ( SpatialGrid grid : collection )
+			if ( grid.getName().equals(name) )
+				return grid;
 		Log.out(Tier.CRITICAL,
-				"EnvironmentContainer can't find grid for \""+soluteName+"\" " +
+				"EnvironmentContainer can't find grid for \""+name+"\" " +
 						this.getClass().getSimpleName());
-		Thread.dumpStack();
 		return null;
 	}
 	
@@ -186,6 +223,14 @@ public class EnvironmentContainer implements CanPrelaunchCheck, Settable
 				return true;
 		return false;
 	}
+
+	public boolean isSpecialName(String name)
+	{
+		for ( SpatialGrid sg : this._special )
+			if ( sg.getName().equals(name) )
+				return true;
+		return false;
+	}
 	
 	/**
 	 * @return The SpatialGrid representation for every solute present in this
@@ -195,7 +240,12 @@ public class EnvironmentContainer implements CanPrelaunchCheck, Settable
 	{
 		return this._solutes;
 	}
-	
+
+
+	public Collection<SpatialGrid> getSpecials()
+	{
+		return this._special;
+	}
 	/**
 	 * @return All of this {@code Compartment}'s extracellular reactions.
 	 */
@@ -571,6 +621,8 @@ public class EnvironmentContainer implements CanPrelaunchCheck, Settable
 		modelNode.add( this.getSolutesNode() );
 		/* Add the reactions node. */
 		modelNode.add( this.getReactionNode() );
+		/* Add special grid node. */
+		modelNode.add( this.getSpecialNode() );
 		return modelNode;	
 	}
 	
@@ -595,6 +647,25 @@ public class EnvironmentContainer implements CanPrelaunchCheck, Settable
 		modelNode.addChildSpec( ClassRef.spatialGrid, 
 				null, Module.Requirements.ZERO_TO_MANY );
 		
+		return modelNode;
+	}
+
+	private Module getSpecialNode()
+	{
+		/* The special node. */
+		Module modelNode = new Module(XmlRef.grids, this);
+		modelNode.setTitle(XmlRef.grids);
+		modelNode.setRequirements(Requirements.EXACTLY_ONE);
+		/*
+		 * add special nodes, yet only if the environment has been initiated, when
+		 * creating a new compartment solutes can be added later
+		 */
+		for ( String grid : this.getGridNames(this._special) )
+			modelNode.add( this.getSpecialGrid(grid).getModule() );
+
+		modelNode.addChildSpec( ClassRef.spatialGrid,
+				null, Module.Requirements.ZERO_TO_MANY );
+
 		return modelNode;
 	}
 	

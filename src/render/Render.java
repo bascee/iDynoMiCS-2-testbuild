@@ -734,7 +734,8 @@ public class Render implements GLEventListener, Runnable {
 			@Override
 			public void actionPerformed(ActionEvent g) {
 				System.out.println("def_add");
-				((AgentMediator) r._commandMediator).definition++;
+				if( ((AgentMediator) r._commandMediator).definition < 10 )
+					((AgentMediator) r._commandMediator).definition++;
 			}
 		});
 		
@@ -742,11 +743,12 @@ public class Render implements GLEventListener, Runnable {
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, 0), "def_sub") ;
 		actionMap.put("def_sub", new AbstractAction(){
 			private static final long serialVersionUID = 346448974654345823L;
-			
+
 			@Override
 			public void actionPerformed(ActionEvent g) {
 				System.out.println("def_sub");
-				((AgentMediator) r._commandMediator).definition--;
+				if( ((AgentMediator) r._commandMediator).definition > 2 )
+					((AgentMediator) r._commandMediator).definition--;
 			}
 		});	
 		

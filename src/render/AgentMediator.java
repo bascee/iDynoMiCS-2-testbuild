@@ -107,7 +107,7 @@ public class AgentMediator implements CommandMediator {
 	/**
 	 * 
 	 */
-	public int definition = 3;
+	public int definition = 4;
 	/**
 	 * Default slices / stacks to subdivide polar objects.
 	 * TODO we really want to have this separate for small and large objects

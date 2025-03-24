@@ -131,7 +131,7 @@ public class Global extends ParameterSet
 	/**
 	 * Version description.
 	 */
-	public static String version_description = "November 2023";
+	public static String version_description = "February 2025";
 	
 	/**
 	* Version number of this iteration of iDynoMiCS - required by update
@@ -139,7 +139,7 @@ public class Global extends ParameterSet
 	 *
 	 * suggested Major.Minor.YYMMDD
 	*/
-	public static String version_number = "2.0.231109";
+	public static String version_number = "2.0.250204";
 	
 	/**
 	 * default output location
@@ -396,4 +396,9 @@ public class Global extends ParameterSet
 	 */
 	public static Expression fallback_spinefunction =
 			new Expression( "stiffness * ( dh + SIGN(dh) * dh * dh * 100.0 )" );
+
+	/**
+	 * Enable concurrent calculation (can be used for pH calculations in spatial compartment).
+	 */
+	public static boolean concurrent_calculation = true;
 }
