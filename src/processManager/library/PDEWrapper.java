@@ -75,7 +75,7 @@ public class PDEWrapper extends ProcessDiffusion {
         this.relTol = (double) this.getOr(REL_TOLERANCE, 1.0e-6);
 
         this.solverResidualRatioThreshold = (double) this.getOr(
-                AspectRef.solverResidualRatioThreshold, 1.0e-3);
+                AspectRef.solverResidualRatioThreshold, 1.0e-4);
 
         int vCycles = (int) this.getOr(AspectRef.vCycles, 15);
         int preSteps = (int) this.getOr(AspectRef.preSteps, 5);

@@ -432,14 +432,6 @@ public abstract class Boundary implements Settable, Instantiable
 		return modelNode;
 	}
 
-	@Override
-	public void setModule(Module node)
-	{
-		// TODO
-	}
-
-	// TODO ?
-	//public void addChildObject(NodeConstructor childObject)
 
 	@Override
 	public String defaultXmlTag()

@@ -89,6 +89,7 @@ public strictfp class Simulator implements CanPrelaunchCheck, Runnable,
 		
 	public Simulator()
 	{
+		Idynomics.simulator = this;
 		/* Just for unit tests initialize random number generator here */
 		if( ExtraMath.random == null )
     		ExtraMath.initialiseRandomNumberGenerator();

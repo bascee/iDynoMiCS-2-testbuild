@@ -21,7 +21,7 @@ public class SvgExport implements GraphicalExporter
 	/**
 	 * TODO
 	 */
-	protected int _filewriterfilenr = 0;
+	protected int _filewriterfilenr = 1;
 	/**
 	 * TODO
 	 */
@@ -86,7 +86,7 @@ public class SvgExport implements GraphicalExporter
 	{
 		String fileString = Idynomics.global.outputLocation + prefix + "/" 
 				+ prefix + "_" + DigitFilenr(_filewriterfilenr)  
-				+ "_" + Idynomics.simulator.timer.getCurrentIteration() + ".svg";
+				+ "_" + DigitFilenr(Idynomics.simulator.timer.getCurrentIteration()) + ".svg";
 		_svgFile.fnew(fileString);
 		_svgFile.write("<svg xmlns=\"http://www.w3.org/2000/svg\" "
 				+ "version=\"1.1\">\n");
@@ -176,13 +176,7 @@ public class SvgExport implements GraphicalExporter
 	 * converts the (polar) rectangle defined by <b>origin</b> and 
 	 * <b>dimension</b> into a cartesian polygon.
 	 * Approximates curves with numPointsOnArc - 1 lines.
-	 * 
-	 * TODO find better names
-	 * @param r0
-	 * @param r1
-	 * @param theta0
-	 * @param theta1
-	 * @param pigment
+	 *
 	 */
 	public void circleElement(double[] circle_center, double[] element_origin, 
 			double[] dimension ,double numPointsOnArc, String pigment)
@@ -242,8 +236,6 @@ public class SvgExport implements GraphicalExporter
 	
 	/**
 	 * draw a line
-	 * @param File
-	 * @param q
 	 */
 	public void line(double[] positionA, double[] positionB, String pigment)
 	{

@@ -26,7 +26,7 @@ public class PovExport implements GraphicalExporter
 	/**
 	 * TODO
 	 */
-	protected int _filewriterfilenr = 0;
+	protected int _filewriterfilenr = 1;
 
 	protected double[] filter;
 
@@ -72,8 +72,8 @@ public class PovExport implements GraphicalExporter
 	 */
 	public void createFile(String prefix)
 	{
-		String fileString = Idynomics.global.outputLocation + prefix + "/" 
-				+ prefix + "_" + Idynomics.simulator.timer.getCurrentIteration()
+		String fileString = Idynomics.global.outputLocation + prefix + "/"
+				+ prefix + "_" + DigitFilenr(Idynomics.simulator.timer.getCurrentIteration())
 				+ "_" + DigitFilenr(_filewriterfilenr) + ".pov";
 		_povFile.fnew(fileString);
 
