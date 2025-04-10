@@ -189,7 +189,7 @@ public class Render implements GLEventListener, Runnable {
 
 			 y-=15;
 			 textRenderer.draw( definition_update + " render definition", 10, y - font.getSize());
-	         
+
 	         Map<String,String> solutes = 
 	        		 ((AgentMediator) this._commandMediator).soluteColors;
 	         for( String c : solutes.keySet())
