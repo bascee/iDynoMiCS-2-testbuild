@@ -131,7 +131,7 @@ public class Global extends ParameterSet
 	/**
 	 * Version description.
 	 */
-	public static String version_description = "February 2025";
+	public static String version_description = "April 2025";
 	
 	/**
 	* Version number of this iteration of iDynoMiCS - required by update
@@ -139,7 +139,7 @@ public class Global extends ParameterSet
 	 *
 	 * suggested Major.Minor.YYMMDD
 	*/
-	public static String version_number = "2.0.250204";
+	public static String version_number = "2.0.250410";
 	
 	/**
 	 * default output location
