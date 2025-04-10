@@ -240,7 +240,7 @@ public class Render implements GLEventListener, Runnable {
 
 		/* camera perspective */
 		_glu.gluPerspective( 20.0f, _aspectRatio,
-				dist * 0.5f, dist * 1.5f + Math.abs(_zoom) * 1000.0f );
+				dist * 0.5f, dist * 1.5f + Math.abs( _zoom ) * 1000.0f );
 
 		/* 
 		 * camera position, direction and rotation 

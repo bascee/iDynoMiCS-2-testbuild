@@ -383,7 +383,7 @@ public class Global extends ParameterSet
 	/**
 	 * Used to determine if a residual in multigrid is becoming negligibly small.
 	 */
-	public static double negligible_change = 1e-15;
+	public static double negligible_change = 1e-13;
 
 	/**
 	 * Number of digits (including leading zeros) in file numbering
