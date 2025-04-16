@@ -214,8 +214,7 @@ public class PDEWrapper extends ProcessDiffusion {
          * more to do.
          */
         @SuppressWarnings("unchecked")
-        List<Reaction> reactions =
-                (List<Reaction>) agent.getValue(XmlRef.reactions);
+        List<Reaction> reactions = (List<Reaction>)  agent.reg().getValue(agent, XmlRef.reactions, false);
         if (reactions == null)
             return;
         /*
@@ -471,10 +470,12 @@ public class PDEWrapper extends ProcessDiffusion {
         /*
          * Get the agent's reactions: if it has none, then there is nothing
          * more to do.
+         *
+         * Here we are pulling the object imidiatly (even if it is null) and checking for it's
+         * existense later to prevent unnescisary overhead for this frequently called segment
          */
         @SuppressWarnings("unchecked")
-        List<RegularReaction> reactions =
-                (List<RegularReaction>) agent.getValue(XmlRef.reactions);
+        List<Reaction> reactions = (List<Reaction>)  agent.reg().getValue(agent, XmlRef.reactions, false);
         if ( reactions == null )
             return;
 
