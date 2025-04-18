@@ -151,9 +151,9 @@ public class AgentContainer implements Settable
 				 * change, min represents domain minima */
 				double[] min = Vector.zerosDbl(
 						this.getShape().getNumberOfDimensions() );
-				/* The 2D optimum is different from 3D, 2 * 2 ^ #dimensions
+				/* The 2D optimum is different from 3D, n * 2 ^ #dimensions
 				 * seems to perform well in general.  */
-				this._agentTree = new SplitTree<Agent>( 1 + (2 << min.length) ,
+				this._agentTree = new SplitTree<Agent>( (3 << min.length) ,
 						min, Vector.add( min, 
 						this.getShape().getDimensionLengths() ),
 						this._shape.getIsCyclicNaturalOrder() );
@@ -566,8 +566,9 @@ public class AgentContainer implements Settable
 	private void treeInsert(Agent anAgent)
 	{
 		Body body = ((Body) anAgent.get(AspectRef.agentBody));
-		Double dist = anAgent.getDouble(AspectRef.agentPulldistance);
-		dist = Helper.setIfNone(dist, 0.0);
+		double dist = 0.0;
+		if( anAgent.isAspect( AspectRef.agentPulldistance ))
+			dist = anAgent.getDouble(AspectRef.agentPulldistance);
 		List<BoundingBox> boxes = body.getBoxes(dist, this.getShape());
 		for ( BoundingBox b: boxes )
 			this._agentTree.insert(b, anAgent);

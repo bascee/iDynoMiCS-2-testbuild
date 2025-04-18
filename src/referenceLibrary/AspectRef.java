@@ -530,6 +530,10 @@ public class AspectRef
 	/**
 	 * 
 	 */
+	public static final String removalRate = "removalRate" ;
+	/**
+	 *
+	 */
 	public static final String attachmentRate = "attachmentRate";
 	
 	/**

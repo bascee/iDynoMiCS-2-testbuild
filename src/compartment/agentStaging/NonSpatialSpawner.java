@@ -1,24 +1,21 @@
 package compartment.agentStaging;
 
-import agent.AgentHelperMethods;
-import org.w3c.dom.Element;
-
 import agent.Agent;
+import agent.AgentHelperMethods;
 import agent.Body;
 import compartment.AgentContainer;
+import org.w3c.dom.Element;
 import processManager.ProcessMethods;
 import referenceLibrary.AspectRef;
 import utility.ExtraMath;
 
 import java.util.Map;
-
-
 /**
  * 
  * @author Bastiaan Cockx @BastiaanCockx (baco@env.dtu.dk), DTU, Denmark.
  *
  */
-public class RandomSpawner extends Spawner {
+public class NonSpatialSpawner extends Spawner {
 	
 	
 	public void init(Element xmlElem, AgentContainer agents, 
@@ -34,10 +31,7 @@ public class RandomSpawner extends Spawner {
 		{
 			/* use copy constructor */
 			Agent newRandom = new Agent(this.getTemplate());
-			newRandom.set(AspectRef.agentBody, 
-					new Body( this.getMorphology(), this.getSpawnDomain() ));
 			newRandom.setCompartment( this.getCompartment() );
-			AgentHelperMethods.springInitialization(newRandom);
 
 			randomizeMass(newRandom);
 			newRandom.registerBirth();

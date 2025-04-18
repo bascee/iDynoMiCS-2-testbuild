@@ -75,7 +75,7 @@ public class PDEWrapper extends ProcessDiffusion {
         this.relTol = (double) this.getOr(REL_TOLERANCE, 1.0e-6);
 
         this.solverResidualRatioThreshold = (double) this.getOr(
-                AspectRef.solverResidualRatioThreshold, 1.0e-3);
+                AspectRef.solverResidualRatioThreshold, 1.0e-4);
 
         int vCycles = (int) this.getOr(AspectRef.vCycles, 15);
         int preSteps = (int) this.getOr(AspectRef.preSteps, 5);
@@ -214,8 +214,7 @@ public class PDEWrapper extends ProcessDiffusion {
          * more to do.
          */
         @SuppressWarnings("unchecked")
-        List<Reaction> reactions =
-                (List<Reaction>) agent.getValue(XmlRef.reactions);
+        List<Reaction> reactions = (List<Reaction>)  agent.reg().getValue(agent, XmlRef.reactions, false);
         if (reactions == null)
             return;
         /*
@@ -272,7 +271,11 @@ public class PDEWrapper extends ProcessDiffusion {
                      */
                     concn = agent.getDouble(varName) * perVolume;
                 } else {
-                    // TODO safety?
+                    // We have this option in order to facilitate components that can play a role but
+                    // may not yet exist at the start of a simulation, for example microbial storage
+                    // compounds.
+                    Log.out(Log.Tier.CRITICAL , "Requested variable \"" + varName +
+                            "\" is not (yet) defined, check the spelling, returning 0.0.");
                     concn = 0.0;
                 }
                 concns.put(varName, concn);
@@ -467,10 +470,12 @@ public class PDEWrapper extends ProcessDiffusion {
         /*
          * Get the agent's reactions: if it has none, then there is nothing
          * more to do.
+         *
+         * Here we are pulling the object imidiatly (even if it is null) and checking for it's
+         * existense later to prevent unnescisary overhead for this frequently called segment
          */
         @SuppressWarnings("unchecked")
-        List<RegularReaction> reactions =
-                (List<RegularReaction>) agent.getValue(XmlRef.reactions);
+        List<Reaction> reactions = (List<Reaction>)  agent.reg().getValue(agent, XmlRef.reactions, false);
         if ( reactions == null )
             return;
 
@@ -534,7 +539,11 @@ public class PDEWrapper extends ProcessDiffusion {
                     }
                     else
                     {
-                        // TODO safety?
+                        // We have this option in order to facilitate components that can play a role but
+                        // may not yet exist at the start of a simulation, for example microbial storage
+                        // compounds.
+                        Log.out(Log.Tier.CRITICAL , "Requested variable \"" + varName +
+                                "\" is not (yet) defined, check the spelling, returning 0.0.");
                         concn = 0.0;
                     }
                     concns.put(varName, concn);

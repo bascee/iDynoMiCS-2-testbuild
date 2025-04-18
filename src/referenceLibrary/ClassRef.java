@@ -89,7 +89,7 @@ public class ClassRef
 	
 	/**
 	 * Get the simplified name from a class full path specification String
-	 * @param String class including path
+	 * @param name
 	 * @return String
 	 */
 	public static String simplify(String name)
@@ -537,7 +537,10 @@ public class ClassRef
 	
 	public final static String distributedSpawner =
 			compartment.agentStaging.DistributedSpawner.class.getName();
-	
+
+	public final static String nonSpatialSpawner =
+			compartment.agentStaging.NonSpatialSpawner.class.getName();
+
 	public final static String epithelialLayerSpawner = 
 			compartment.agentStaging.EpithelialLayerSpawner.class.getName();
 	
