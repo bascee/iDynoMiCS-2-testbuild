@@ -18,18 +18,27 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
+    - name: Create lib directory
+      run: mkdir -p lib
+
+    - name: Download EXIficient dependencies
+      run: |
+        wget https://repo1.maven.org/maven2/com/siemens/ct/exi/exificient/0.9.3/exificient-0.9.3.jar -O lib/exificient.jar
+        wget https://repo1.maven.org/maven2/junit/junit/4.13.2/junit-4.13.2.jar -O lib/junit.jar
+        wget https://repo1.maven.org/maven2/org/ejml/ejml-core/0.41/ejml-core-0.41.jar -O lib/ejml-core.jar
+
     - name: Compile Java source
       run: |
         mkdir -p target/classes
         find src -name "*.java" > sources.txt
-        javac -d target/classes @sources.txt
+        javac -d target/classes @sources.txt -cp "lib/*:target/classes"
 
     - name: Create executable JAR
       run: |
         mkdir -p artifact_staging
         echo "Main-Class: idynomics.Idynomics" > manifest.txt
-        jar cvfm artifact_staging/iDynoMiCS.jar manifest.txt -C target/classes .
-        
+        jar cvfm artifact_staging/iDynoMiCS.jar manifest.txt -C target/classes . -C lib .
+
     - name: Package supporting files
       run: |
         cp -r colourPalettes/ artifact_staging/
