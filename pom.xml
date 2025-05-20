@@ -40,7 +40,18 @@
                     </includes>
                 </configuration>
             </plugin>
-
+             <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-surefire-plugin</artifactId>
+               <version>3.2.5</version>
+               <configuration>
+                 <argLine>
+                   --add-exports java.base/java.lang=ALL-UNNAMED
+                   --add-exports java.desktop/sun.awt=ALL-UNNAMED
+                   --add-exports java.desktop/sun.java2d=ALL-UNNAMED
+                 </argLine>
+               </configuration>
+             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
