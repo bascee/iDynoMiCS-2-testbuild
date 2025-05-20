@@ -18,19 +18,18 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Build Jar
-      run: mvn -B clean package
+    - name: Compile Java source
+      run: |
+        mkdir -p target/classes
+        find src -name "*.java" > sources.txt
+        javac -d target/classes @sources.txt
 
     - name: Create executable JAR
       run: |
         mkdir -p artifact_staging
-        cp target/*.jar artifact_staging/
-        cd artifact_staging
-        for jar in *.jar; do
-          jar ufm "$jar" <(echo "Main-Class: idynomics.Idynomics")
-        done
-        cd ..
-
+        echo "Main-Class: idynomics.Idynomics" > manifest.txt
+        jar cvfm artifact_staging/iDynoMiCS.jar manifest.txt -C target/classes .
+        
     - name: Package supporting files
       run: |
         cp -r colourPalettes/ artifact_staging/
@@ -39,8 +38,11 @@ jobs:
         cp -r protocol/ artifact_staging/
         cp *.md artifact_staging/
 
-    - name: Create deployment bundle
+    - name: Create final artifact
       run: zip -r iDynoMiCS-artifact.zip artifact_staging/
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
+      with:
+        name: iDynoMiCS-bundle
+        path: iDynoMiCS-artifact.zip
