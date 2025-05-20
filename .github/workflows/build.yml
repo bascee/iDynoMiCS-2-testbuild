@@ -48,16 +48,16 @@ jobs:
         echo "Main-Class: idynomics.Idynomics" > manifest.txt
         echo "Class-Path: " >> manifest.txt
         
-        # List JARs and format with line continuations
+        # Process dependencies with correct line wrapping
         (cd artifact_staging/lib && \
         ls *.jar | sed 's/^/lib\//' | \
-        awk 'BEGIN {ORS=" \\\n "} {print}' | \
         fold -w 70 -s | \
-        sed 's/^ /  /' ) >> ../manifest.txt
-    
+        sed 's/\(.*\)/ \1/' | \
+        tr '\n' ' ') >> ../manifest.txt
+        
         # Add final newline required by spec
         echo "" >> manifest.txt
-    
+
         - name: Create executable JAR
           run: |
             jar cvfm artifact_staging/iDynoMiCS.jar manifest.txt -C target/classes .
