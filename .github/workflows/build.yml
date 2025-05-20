@@ -11,10 +11,10 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up Java 11
+    - name: Set up Java 8
       uses: actions/setup-java@v3
       with:
-        java-version: '11'
+        java-version: '8'
         distribution: 'temurin'
 
     - name: Install local dependencies
