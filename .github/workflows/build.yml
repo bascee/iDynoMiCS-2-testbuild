@@ -18,26 +18,27 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Create lib directory
-      run: mkdir -p lib
-
-    - name: Download EXIficient dependencies
+    - name: Prepare directories
       run: |
-        wget https://repo1.maven.org/maven2/com/siemens/ct/exi/exificient/0.9.3/exificient-0.9.3.jar -O lib/exificient.jar
-        wget https://repo1.maven.org/maven2/junit/junit/4.13.2/junit-4.13.2.jar -O lib/junit.jar
-        wget https://repo1.maven.org/maven2/org/ejml/ejml-core/0.41/ejml-core-0.41.jar -O lib/ejml-core.jar
+        mkdir -p target/classes
+        mkdir -p artifact_staging/lib
+
+    - name: Copy dependencies
+      run: cp -r src/lib/*.jar artifact_staging/lib/
 
     - name: Compile Java source
       run: |
-        mkdir -p target/classes
         find src -name "*.java" > sources.txt
-        javac -d target/classes @sources.txt -cp "lib/*:target/classes"
+        javac -d target/classes @sources.txt -cp "src/lib/*"
+
+    - name: Generate manifest
+      run: |
+        echo "Main-Class: idynomics.Idynomics" > manifest.txt
+        echo "Class-Path: $(ls src/lib/*.jar | xargs -n1 basename | sed 's/^/lib\//' | tr '\n' ' ')" >> manifest.txt
 
     - name: Create executable JAR
       run: |
-        mkdir -p artifact_staging
-        echo "Main-Class: idynomics.Idynomics" > manifest.txt
-        jar cvfm artifact_staging/iDynoMiCS.jar manifest.txt -C target/classes . -C lib .
+        jar cvfm artifact_staging/iDynoMiCS.jar manifest.txt -C target/classes .
 
     - name: Package supporting files
       run: |
@@ -48,7 +49,8 @@ jobs:
         cp *.md artifact_staging/
 
     - name: Create final artifact
-      run: zip -r iDynoMiCS-artifact.zip artifact_staging/
+      run: |
+        cd artifact_staging && zip -r ../iDynoMiCS-artifact.zip . && cd ..
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
