@@ -51,7 +51,7 @@ jobs:
         mkdir -p iDynoMiCS-bundle
         
         # Copy main JAR (using explicit name pattern)
-        cp target/*-jar-with-dependencies.jar iDynoMiCS-bundle/iDynoMiCS.jar
+        cp target/*.jar iDynoMiCS-bundle/iDynoMiCS.jar
         
         # Copy configuration files and directories
         cp -r colourPalettes config protocol iDynoMiCS-bundle/
