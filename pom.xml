@@ -144,7 +144,7 @@
              <version>2.3.2</version>
              <classifier>natives-linux-aarch64</classifier>
              <scope>system</scope>
-             <systemPath>${project.basedir}/src/lib/jogl-all-natives-linux-aarch64.jar</systemPath>
+             <systemPath>${project.basedir}/src/lib/jogl/jogl-all-natives-linux-aarch64.jar</systemPath>
          </dependency>
          <dependency>
              <groupId>org.jogamp.gluegen</groupId>
@@ -152,7 +152,7 @@
              <version>2.3.2</version>
              <classifier>natives-linux-aarch64</classifier>
              <scope>system</scope>
-             <systemPath>${project.basedir}/src/lib/gluegen-rt-natives-linux-aarch64.jar</systemPath>
+             <systemPath>${project.basedir}/src/lib/jogl/gluegen-rt-natives-linux-aarch64.jar</systemPath>
          </dependency>
          <dependency>
              <groupId>org.jogamp.jogl</groupId>
