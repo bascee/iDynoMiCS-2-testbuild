@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.idynomics</groupId>
+    <groupId>idynomics</groupId>
     <artifactId>iDynoMiCS-2</artifactId>
     <version>2.0</version>
     <packaging>jar</packaging>
@@ -16,6 +16,9 @@
     </properties>
 
     <build>
+        <!-- Set source directory to project's src folder -->
+        <sourceDirectory>src</sourceDirectory>
+        
         <resources>
             <resource>
                 <directory>colourPalettes</directory>
@@ -88,14 +91,9 @@
 
         <!-- Other dependencies -->
         <dependency>
-            <groupId>org.jfree</groupId>
+            <groupId>javax.vecmath</groupId>
             <artifactId>vecmath</artifactId>
             <version>1.5.2</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
         </dependency>
     </dependencies>
 </project>
