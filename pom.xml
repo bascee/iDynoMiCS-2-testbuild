@@ -97,6 +97,8 @@
             <groupId>org.optimization</groupId>
             <artifactId>DasOptimization</artifactId>
             <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/lib/DasOptimization.jar</systemPath>
         </dependency>
         <!-- Existing Dependencies -->
         <dependency>
@@ -141,12 +143,16 @@
              <artifactId>jogl-all</artifactId>
              <version>2.3.2</version>
              <classifier>natives-linux-aarch64</classifier>
+             <scope>system</scope>
+             <systemPath>${project.basedir}/src/lib/jogl-all-natives-linux-aarch64.jar</systemPath>
          </dependency>
          <dependency>
              <groupId>org.jogamp.gluegen</groupId>
              <artifactId>gluegen-rt</artifactId>
              <version>2.3.2</version>
              <classifier>natives-linux-aarch64</classifier>
+             <scope>system</scope>
+             <systemPath>${project.basedir}/src/lib/gluegen-rt-natives-linux-aarch64.jar</systemPath>
          </dependency>
          <dependency>
              <groupId>org.jogamp.jogl</groupId>
@@ -168,11 +174,6 @@
              <version>2.3.2</version>
              <classifier>natives-macosx-universal</classifier>
          </dependency>
-        <dependency>
-            <groupId>com.siemens.ct.exi</groupId>
-            <artifactId>exificient-core</artifactId>
-            <version>0.9.3</version>
-        </dependency>
         <dependency>
             <groupId>javax.vecmath</groupId>
             <artifactId>vecmath</artifactId>
