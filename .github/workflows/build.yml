@@ -45,25 +45,18 @@ jobs:
           -DgroupId=org.jogamp.gluegen -DartifactId=gluegen-rt \
           -Dversion=2.3.2 -Dpackaging=jar
 
+        - name: Build with Maven
+        run: mvn clean package -DskipTests
+        
     - name: Package artifacts
       run: |
-        # Create clean bundle directory
-        mkdir -p iDynoMiCS-bundle
-        
-        # Copy main JAR (using explicit name pattern)
-        cp target/*.jar iDynoMiCS-bundle/iDynoMiCS.jar
-        
-        # Copy configuration files and directories
-        cp -r colourPalettes config protocol iDynoMiCS-bundle/
-        
-        # Copy documentation and config files
-        cp *.md default.cfg LICENSE* iDynoMiCS-bundle/
-        
-        # Create flat ZIP structure
-        cd iDynoMiCS-bundle && zip -r ../iDynoMiCS-bundle.zip . && cd ..
+        mkdir -p artifact-bundle
+        cp target/*.jar artifact-bundle/
+        cp -r colourPalettes config protocol artifact-bundle/
+        cp *.md default.cfg *.MD artifact-bundle/ || true
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: iDynoMiCS-bundle
-        path: iDynoMiCS-bundle.zip
+        path: artifact-bundle/
