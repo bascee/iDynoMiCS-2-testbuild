@@ -45,18 +45,16 @@ jobs:
     - name: Generate manifest
       run: |
         # Create manifest with proper line wrapping
-        echo "Main-Class: idynomics.Idynomics" > manifest.txt
-        echo "Class-Path: " >> manifest.txt
-        
-        # Process dependencies with correct line wrapping
-        (cd artifact_staging/lib && \
-        ls *.jar | sed 's/^/lib\//' | \
-        fold -w 70 -s | \
-        sed 's/\(.*\)/ \1/' | \
-        tr '\n' ' ') >> ../manifest.txt
-        
-        # Add final newline required by spec
-        echo "" >> manifest.txt
+        {
+          echo "Main-Class: idynomics.Idynomics"
+          echo "Class-Path: \\"
+          (cd artifact_staging/lib && \
+           ls *.jar | sed 's/^/lib\//' | \
+           while read -r line; do \
+             printf " %s\\\n" "$line"; \
+           done | fold -w 71 | sed 's/\\$//')
+          echo ""
+        } > manifest.txt
 
         - name: Create executable JAR
           run: |
