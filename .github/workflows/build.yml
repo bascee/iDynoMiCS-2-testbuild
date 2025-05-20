@@ -92,10 +92,10 @@ jobs:
         mkdir -p artifact-bundle
         cp target/*.jar artifact-bundle/
         cp -r colourPalettes config protocol artifact-bundle/
-        cp *.md default.cfg *.MD artifact-bundle/ || true
+        cp *.md *.MD *.TXT default.cfg artifact-bundle/ || true
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: iDynoMiCS-bundle
+        name: iDynoMiCS-2
         path: artifact-bundle/
