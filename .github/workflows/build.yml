@@ -19,6 +19,22 @@ jobs:
 
     - name: Install local dependencies
       run: |
+        # Install EJML
+        mvn install:install-file -Dfile=src/lib/ejml-core-0.41.jar \
+          -DgroupId=org.ejml -DartifactId=ejml-core -Dversion=0.41 -Dpackaging=jar
+        
+        # Install DasOptimization
+        mvn install:install-file -Dfile=src/lib/DasOptimization.jar \
+          -DgroupId=org.optimization -DartifactId=DasOptimization -Dversion=1.0 -Dpackaging=jar
+        
+        # Install EXIficient 1.0.4
+        mvn install:install-file -Dfile=src/lib/exificient-1.0.4.jar \
+          -DgroupId=com.siemens.ct.exi -DartifactId=exificient -Dversion=1.0.4 -Dpackaging=jar
+        
+        # Install JUnit
+        mvn install:install-file -Dfile=src/lib/JUnit/junit-4.13.2.jar \
+          -DgroupId=junit -DartifactId=junit -Dversion=4.13.2 -Dpackaging=jar
+        
         # Install JOGL
         mvn install:install-file -Dfile=src/lib/jogl/jogl-all.jar \
           -DgroupId=org.jogamp.jogl -DartifactId=jogl-all \
@@ -27,11 +43,6 @@ jobs:
         mvn install:install-file -Dfile=src/lib/jogl/gluegen-rt.jar \
           -DgroupId=org.jogamp.gluegen -DartifactId=gluegen-rt \
           -Dversion=2.3.2 -Dpackaging=jar
-
-        # Install EXIficient
-        mvn install:install-file -Dfile=src/lib/exificient-core.jar \
-          -DgroupId=com.siemens.ct.exi -DartifactId=exificient-core \
-          -Dversion=0.9.3 -Dpackaging=jar
 
     - name: Build with Maven
       run: mvn clean package
