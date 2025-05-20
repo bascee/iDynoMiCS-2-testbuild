@@ -25,15 +25,20 @@ jobs:
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2
 
-    - name: Install local dependencies
+    - name: Install local JAR dependencies
       run: |
+        # Install EXIficient
         mvn install:install-file -Dfile=src/lib/exificient-core.jar \
           -DgroupId=org.exificient -DartifactId=exificient-core \
           -Dversion=0.9.3 -Dpackaging=jar
         
+        # Install JOGL
         mvn install:install-file -Dfile=src/lib/jogl/jogl-all.jar \
           -DgroupId=org.jogamp.jogl -DartifactId=jogl-all \
           -Dversion=2.3.2 -Dpackaging=jar
+        
+        # Install other dependencies as needed
+        # ...
 
     - name: Build with Maven
       run: mvn clean package
@@ -41,7 +46,7 @@ jobs:
     - name: Package artifacts
       run: |
         mkdir artifact-bundle
-        cp target/*-jar-with-dependencies.jar artifact-bundle/iDynoMiCS.jar
+        cp target/*.jar artifact-bundle/
         cp -r colourPalettes config protocol *.md artifact-bundle/
         zip -r iDynoMiCS-bundle.zip artifact-bundle
 
