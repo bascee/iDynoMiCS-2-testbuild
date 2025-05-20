@@ -45,6 +45,45 @@ jobs:
           -DgroupId=org.jogamp.gluegen -DartifactId=gluegen-rt \
           -Dversion=2.3.2 -Dpackaging=jar
 
+        # Install Windows Natives
+        mvn install:install-file -Dfile=src/lib/jogl/jogl-all-natives-windows-amd64.jar \
+          -DgroupId=org.jogamp.jogl -DartifactId=jogl-all \
+          -Dversion=2.3.2 -Dclassifier=natives-windows-amd64 -Dpackaging=jar
+        
+        mvn install:install-file -Dfile=src/lib/jogl/gluegen-rt-natives-windows-amd64.jar \
+          -DgroupId=org.jogamp.gluegen -DartifactId=gluegen-rt \
+          -Dversion=2.3.2 -Dclassifier=natives-windows-amd64 -Dpackaging=jar
+        
+        # Install Linux Natives
+        mvn install:install-file -Dfile=src/lib/jogl/jogl-all-natives-linux-amd64.jar \
+          -DgroupId=org.jogamp.jogl -DartifactId=jogl-all \
+          -Dversion=2.3.2 -Dclassifier=natives-linux-amd64 -Dpackaging=jar
+        
+        mvn install:install-file -Dfile=src/lib/jogl/gluegen-rt-natives-linux-amd64.jar \
+          -DgroupId=org.jogamp.gluegen -DartifactId=gluegen-rt \
+          -Dversion=2.3.2 -Dclassifier=natives-linux-amd64 -Dpackaging=jar
+        
+        mvn install:install-file -Dfile=src/lib/jogl/jogl-all-natives-linux-aarch64.jar \
+          -DgroupId=org.jogamp.jogl -DartifactId=jogl-all \
+          -Dversion=2.3.2 -Dclassifier=natives-linux-aarch64 -Dpackaging=jar
+        
+        mvn install:install-file -Dfile=src/lib/jogl/gluegen-rt-natives-linux-aarch64.jar \
+          -DgroupId=org.jogamp.gluegen -DartifactId=gluegen-rt \
+          -Dversion=2.3.2 -Dclassifier=natives-linux-aarch64 -Dpackaging=jar
+        
+        mvn install:install-file -Dfile=src/lib/jogl/jogl-all-natives-linux-armv6hf.jar \
+          -DgroupId=org.jogamp.jogl -DartifactId=jogl-all \
+          -Dversion=2.3.2 -Dclassifier=natives-linux-armv6hf -Dpackaging=jar
+        
+        # Install macOS Natives
+        mvn install:install-file -Dfile=src/lib/jogl/jogl-all-natives-macosx-universal.jar \
+          -DgroupId=org.jogamp.jogl -DartifactId=jogl-all \
+          -Dversion=2.3.2 -Dclassifier=natives-macosx-universal -Dpackaging=jar
+        
+        mvn install:install-file -Dfile=src/lib/jogl/gluegen-rt-natives-macosx-universal.jar \
+          -DgroupId=org.jogamp.gluegen -DartifactId=gluegen-rt \
+          -Dversion=2.3.2 -Dclassifier=natives-macosx-universal -Dpackaging=jar
+
     - name: Build with Maven
       run: mvn clean package -DskipTests
 
@@ -52,7 +91,6 @@ jobs:
       run: |
         mkdir -p artifact-bundle
         cp target/*.jar artifact-bundle/
-        cp -r src/lib/jogl artifact-bundle/lib/jogl
         cp -r colourPalettes config protocol artifact-bundle/
         cp *.md default.cfg *.MD artifact-bundle/ || true
 
