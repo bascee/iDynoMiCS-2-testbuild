@@ -33,20 +33,12 @@ jobs:
           -DgroupId=com.siemens.ct.exi -DartifactId=exificient-core \
           -Dversion=0.9.3 -Dpackaging=jar
 
-        # Install vecmath
-        mvn install:install-file -Dfile=src/lib/vecmath.jar \
-          -DgroupId=org.jfree -DartifactId=vecmath \
-          -Dversion=1.5.2 -Dpackaging=jar
-
     - name: Build with Maven
       run: mvn clean package
 
-    - name: Package artifacts
+    - name: Verify JAR contents
       run: |
-        mkdir artifact-bundle
-        cp target/iDynoMiCS-2-2.0.jar artifact-bundle/iDynoMiCS.jar
-        cp -r colourPalettes config protocol *.md artifact-bundle/
-        zip -r iDynoMiCS-bundle.zip artifact-bundle
+        jar tf target/iDynoMiCS-2-2.0.jar | grep idynomics/Idynomics.class
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
