@@ -61,6 +61,7 @@
                         <manifest>
                             <mainClass>idynomics.Idynomics</mainClass>
                             <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/jogl/</classpathPrefix>
                         </manifest>
                     </archive>
                     <descriptorRefs>
