@@ -52,7 +52,6 @@ jobs:
       run: |
         mkdir -p artifact-bundle
         cp target/*.jar artifact-bundle/
-        cp -r src/lib artifact-bundle/lib
         cp -r colourPalettes config protocol artifact-bundle/
         cp *.md default.cfg *.MD artifact-bundle/ || true
 
