@@ -35,10 +35,6 @@ jobs:
         # Install JUnit
         mvn install:install-file -Dfile=src/lib/JUnit/junit-4.13.2.jar \
           -DgroupId=junit -DartifactId=junit -Dversion=4.13.2 -Dpackaging=jar
-
-        # Install legacy JUnit (if needed)
-        mvn install:install-file -Dfile=src/lib/JUnit/junit.jar \
-          -DgroupId=junit -DartifactId=junit-legacy -Dversion=3.8.2 -Dpackaging=jar
         
         # Install JOGL
         mvn install:install-file -Dfile=src/lib/jogl/jogl-all.jar \
@@ -49,19 +45,18 @@ jobs:
           -DgroupId=org.jogamp.gluegen -DartifactId=gluegen-rt \
           -Dversion=2.3.2 -Dpackaging=jar
 
-    - name: Build with Maven
-      run: mvn clean package -DskipTests
-
-    - name: Create final bundle
+    - name: Package artifacts
       run: |
         # Create clean bundle directory
         mkdir -p iDynoMiCS-bundle
         
-        # Copy main JAR
+        # Copy main JAR (using explicit name pattern)
         cp target/*-jar-with-dependencies.jar iDynoMiCS-bundle/iDynoMiCS.jar
         
         # Copy configuration files and directories
         cp -r colourPalettes config protocol iDynoMiCS-bundle/
+        
+        # Copy documentation and config files
         cp *.md default.cfg LICENSE* iDynoMiCS-bundle/
         
         # Create flat ZIP structure
