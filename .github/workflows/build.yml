@@ -26,7 +26,7 @@ jobs:
       run: |
         mkdir artifact-bundle
         cp -r target/lib artifact-bundle/lib
-        cp target/iDynoMiCS-2.jar artifact-bundle/
+        cp target/iDynoMiCS-2-2.0.jar artifact-bundle/
         cp -r target/final-artifact/* artifact-bundle/
         cd artifact-bundle && zip -r ../iDynoMiCS-bundle.zip . && cd ..
 
