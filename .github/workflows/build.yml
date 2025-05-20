@@ -44,8 +44,12 @@ jobs:
 
     - name: Generate manifest
       run: |
+        # Create manifest with proper line wrapping
         echo "Main-Class: idynomics.Idynomics" > manifest.txt
-        echo "Class-Path: $(cd artifact_staging/lib && ls *.jar | tr '\n' ' ')" >> manifest.txt
+        echo "Class-Path: " >> manifest.txt
+        cd artifact_staging/lib
+        ls *.jar | sed 's/^/lib\//' | fold -w 70 -s | sed '2,$s/^/ /' | tr '\n' ' ' >> ../../manifest.txt
+        cd ../..
 
     - name: Create executable JAR
       run: |
