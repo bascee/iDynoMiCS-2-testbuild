@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches: [ "main" ]
-
+    
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,7 +23,7 @@ jobs:
         mkdir -p target/classes
         mkdir -p artifact_staging/lib
 
-    - name: Copy JOGL dependencies
+    - name: Copy dependencies
       run: |
         cp -r src/lib/jogl/*.jar artifact_staging/lib/
         cp src/lib/vecmath.jar artifact_staging/lib/
@@ -31,10 +31,16 @@ jobs:
         cp src/lib/DasOptimization.jar artifact_staging/lib/
         cp src/lib/JUnit/*.jar artifact_staging/lib/
 
-    - name: Compile main source
+    - name: Compile sources (main + required tests)
       run: |
-        find src -name "*.java" ! -path "src/test/*" > sources.txt
-        javac -d target/classes @sources.txt -cp "artifact_staging/lib/*"
+        # Include main sources and specific test classes
+        find src -name "*.java" > sources.txt
+        javac -d target/classes @sources.txt \
+          -cp "artifact_staging/lib/*" \
+          -Xlint:all \
+          -Xlint:-strictfp \
+          -Xlint:-removal \
+          -Xlint:-dep-ann
 
     - name: Generate manifest
       run: |
