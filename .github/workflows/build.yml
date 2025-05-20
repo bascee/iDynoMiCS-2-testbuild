@@ -47,13 +47,20 @@ jobs:
         # Create manifest with proper line wrapping
         echo "Main-Class: idynomics.Idynomics" > manifest.txt
         echo "Class-Path: " >> manifest.txt
-        cd artifact_staging/lib
-        ls *.jar | sed 's/^/lib\//' | fold -w 70 -s | sed '2,$s/^/ /' | tr '\n' ' ' >> ../../manifest.txt
-        cd ../..
-
-    - name: Create executable JAR
-      run: |
-        jar cvfm artifact_staging/iDynoMiCS.jar manifest.txt -C target/classes .
+        
+        # List JARs and format with line continuations
+        (cd artifact_staging/lib && \
+        ls *.jar | sed 's/^/lib\//' | \
+        awk 'BEGIN {ORS=" \\\n "} {print}' | \
+        fold -w 70 -s | \
+        sed 's/^ /  /' ) >> ../manifest.txt
+    
+        # Add final newline required by spec
+        echo "" >> manifest.txt
+    
+        - name: Create executable JAR
+          run: |
+            jar cvfm artifact_staging/iDynoMiCS.jar manifest.txt -C target/classes .
 
     - name: Package supporting files
       run: |
