@@ -16,8 +16,9 @@
     </properties>
 
     <build>
-        <sourceDirectory>src</sourceDirectory>
-        <testSourceDirectory>src/test</testSourceDirectory>
+         <sourceDirectory>src</sourceDirectory>
+         <testSourceDirectory>src/test</testSourceDirectory>
+         <testSourceDirectory>src/test/junit</testSourceDirectory>
         
         <resources>
             <!-- Include Java source files -->
