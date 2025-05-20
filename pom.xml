@@ -27,26 +27,6 @@
                     <include>**/*.java</include>
                 </includes>
             </resource>
-            <!-- Include other resources -->
-            <resource>
-                <directory>colourPalettes</directory>
-                <targetPath>colourPalettes</targetPath>
-            </resource>
-            <resource>
-                <directory>config</directory>
-                <targetPath>config</targetPath>
-            </resource>
-            <resource>
-                <directory>protocol</directory>
-                <targetPath>protocol</targetPath>
-            </resource>
-            <resource>
-                <directory>.</directory>
-                <includes>
-                    <include>*.md</include>
-                    <include>config.*</include>
-                </includes>
-            </resource>
         </resources>
 
         <plugins>
