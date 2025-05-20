@@ -5,14 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>idynomics</groupId>
-    <artifactId>iDynoMiCS-2</artifactId>
+    <artifactId>iDynoMiCS-2_test</artifactId>
     <version>2.0</version>
     <packaging>jar</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
     <build>
@@ -105,11 +105,15 @@
             <groupId>org.jogamp.jogl</groupId>
             <artifactId>jogl-all</artifactId>
             <version>2.3.2</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/lib/jogl/jogl-all.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.jogamp.gluegen</groupId>
             <artifactId>gluegen-rt</artifactId>
             <version>2.3.2</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/lib/jogl/gluegen-rt.jar</systemPath>
         </dependency>
          <!-- Windows Native Libraries -->
          <dependency>
@@ -117,12 +121,16 @@
              <artifactId>jogl-all</artifactId>
              <version>2.3.2</version>
              <classifier>natives-windows-amd64</classifier>
+             <scope>system</scope>
+             <systemPath>${project.basedir}/src/lib/jogl/jogl-all-natives-windows-amd64.jar</systemPath>
          </dependency>
          <dependency>
              <groupId>org.jogamp.gluegen</groupId>
              <artifactId>gluegen-rt</artifactId>
              <version>2.3.2</version>
              <classifier>natives-windows-amd64</classifier>
+             <scope>system</scope>
+             <systemPath>${project.basedir}/src/lib/jogl/gluegen-rt-natives-windows-amd64.jar</systemPath>
          </dependency>
          
          <!-- Linux Native Libraries -->
