@@ -4,7 +4,6 @@ on:
   workflow_dispatch:
   push:
     branches: [ "main" ]
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -24,17 +23,18 @@ jobs:
         mkdir -p artifact_staging/lib
 
     - name: Copy dependencies
-      run: cp -r src/lib/*.jar artifact_staging/lib/
-
-    - name: Compile Java source
       run: |
-        find src -name "*.java" > sources.txt
-        javac -d target/classes @sources.txt -cp "src/lib/*"
+        cp -r src/lib/*.jar artifact_staging/lib/
+
+    - name: Compile main source
+      run: |
+        find src/main -name "*.java" > sources.txt
+        javac -d target/classes @sources.txt -cp "artifact_staging/lib/*"
 
     - name: Generate manifest
       run: |
         echo "Main-Class: idynomics.Idynomics" > manifest.txt
-        echo "Class-Path: $(ls src/lib/*.jar | xargs -n1 basename | sed 's/^/lib\//' | tr '\n' ' ')" >> manifest.txt
+        echo "Class-Path: $(cd artifact_staging/lib && ls *.jar | sed 's/^/lib\//' | tr '\n' ' ')" >> manifest.txt
 
     - name: Create executable JAR
       run: |
@@ -45,13 +45,13 @@ jobs:
         cp -r colourPalettes/ artifact_staging/
         cp -r config/ artifact_staging/
         cp config.* artifact_staging/ 2>/dev/null || true
-        cp -r protocol/ artifact_staging/
+        cp -r protocol/ artifact_stagement
         cp *.md artifact_staging/
 
     - name: Create final artifact
       run: |
         cd artifact_staging && zip -r ../iDynoMiCS-artifact.zip . && cd ..
-
+        
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
