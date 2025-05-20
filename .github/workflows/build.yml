@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches: [ "main" ]
-    
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,62 +18,20 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Prepare directories
+    - name: Build with Maven
       run: |
-        mkdir -p target/classes
-        mkdir -p artifact_staging/lib
+        mvn clean package
 
-    - name: Copy dependencies
+    - name: Package artifacts
       run: |
-        cp -r src/lib/jogl/*.jar artifact_staging/lib/
-        cp src/lib/vecmath.jar artifact_staging/lib/
-        cp src/lib/exificient*.jar artifact_staging/lib/
-        cp src/lib/DasOptimization.jar artifact_staging/lib/
-        cp src/lib/JUnit/*.jar artifact_staging/lib/
-
-    - name: Compile sources (main + required tests)
-      run: |
-        # Include main sources and specific test classes
-        find src -name "*.java" > sources.txt
-        javac -d target/classes @sources.txt \
-          -cp "artifact_staging/lib/*" \
-          -Xlint:all \
-          -Xlint:-strictfp \
-          -Xlint:-removal \
-          -Xlint:-dep-ann
-
-    - name: Generate manifest
-      run: |
-        # Create manifest with proper line wrapping
-        {
-          echo "Main-Class: idynomics.Idynomics"
-          echo "Class-Path: \\"
-          (cd artifact_staging/lib && \
-           ls *.jar | sed 's/^/lib\//' | \
-           while read -r line; do \
-             printf " %s\\\n" "$line"; \
-           done | fold -w 71 | sed 's/\\$//')
-          echo ""
-        } > manifest.txt
-
-        - name: Create executable JAR
-          run: |
-            jar cvfm artifact_staging/iDynoMiCS.jar manifest.txt -C target/classes .
-
-    - name: Package supporting files
-      run: |
-        cp -r colourPalettes/ artifact_staging/
-        cp -r config/ artifact_staging/
-        cp config.* artifact_staging/ 2>/dev/null || true
-        cp -r protocol/ artifact_staging/
-        cp *.md artifact_staging/
-
-    - name: Create final artifact
-      run: |
-        cd artifact_staging && zip -r ../iDynoMiCS-artifact.zip . && cd ..
+        mkdir artifact-bundle
+        cp -r target/lib artifact-bundle/lib
+        cp target/iDynoMiCS-2.jar artifact-bundle/
+        cp -r target/final-artifact/* artifact-bundle/
+        cd artifact-bundle && zip -r ../iDynoMiCS-bundle.zip . && cd ..
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: iDynoMiCS-bundle
-        path: iDynoMiCS-artifact.zip
+        path: iDynoMiCS-bundle.zip
