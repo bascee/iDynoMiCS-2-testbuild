@@ -48,15 +48,15 @@ jobs:
         - name: Build with Maven
         run: mvn clean package -DskipTests
         
-    - name: Package artifacts
-      run: |
-        mkdir -p artifact-bundle
-        cp target/*.jar artifact-bundle/
-        cp -r colourPalettes config protocol artifact-bundle/
-        cp *.md default.cfg *.MD artifact-bundle/ || true
-
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: iDynoMiCS-bundle
-        path: artifact-bundle/
+        - name: Package artifacts
+          run: |
+            mkdir -p artifact-bundle
+            cp target/*.jar artifact-bundle/
+            cp -r colourPalettes config protocol artifact-bundle/
+            cp *.md default.cfg *.MD artifact-bundle/ || true
+    
+        - name: Upload artifact
+          uses: actions/upload-artifact@v4
+          with:
+            name: iDynoMiCS-bundle
+            path: artifact-bundle/
