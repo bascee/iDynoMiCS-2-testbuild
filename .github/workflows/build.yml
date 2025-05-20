@@ -19,13 +19,14 @@ jobs:
 
     - name: Install local dependencies
       run: |
-        # Install EJML
-        mvn install:install-file -Dfile=src/lib/ejml-core-0.41.jar \
-          -DgroupId=org.ejml -DartifactId=ejml-core -Dversion=0.41 -Dpackaging=jar
-        
         # Install DasOptimization
         mvn install:install-file -Dfile=src/lib/DasOptimization.jar \
           -DgroupId=org.optimization -DartifactId=DasOptimization -Dversion=1.0 -Dpackaging=jar
+
+        # Install EXIficient
+        mvn install:install-file -Dfile=src/lib/exificient-core.jar \
+          -DgroupId=com.siemens.ct.exi -DartifactId=exificient-core \
+          -Dversion=0.9.3 -Dpackaging=jar
         
         # Install EXIficient 1.0.4
         mvn install:install-file -Dfile=src/lib/exificient-1.0.4.jar \
