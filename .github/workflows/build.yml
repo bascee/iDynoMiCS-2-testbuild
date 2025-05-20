@@ -1,0 +1,46 @@
+name: build iDyno
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Java 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Build Jar
+      run: mvn -B clean package
+
+    - name: Create executable JAR
+      run: |
+        mkdir -p artifact_staging
+        cp target/*.jar artifact_staging/
+        cd artifact_staging
+        for jar in *.jar; do
+          jar ufm "$jar" <(echo "Main-Class: idynomics.Idynomics")
+        done
+        cd ..
+
+    - name: Package supporting files
+      run: |
+        cp -r colourPalettes/ artifact_staging/
+        cp -r config/ artifact_staging/
+        cp config.* artifact_staging/ 2>/dev/null || true
+        cp -r protocol/ artifact_staging/
+        cp *.md artifact_staging/
+
+    - name: Create deployment bundle
+      run: zip -r iDynoMiCS-artifact.zip artifact_staging/
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
