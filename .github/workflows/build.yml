@@ -18,17 +18,32 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Build with Maven
+    - name: Cache Maven packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+
+    - name: Install local dependencies
       run: |
-        mvn clean package
+        mvn install:install-file -Dfile=src/lib/exificient-core.jar \
+          -DgroupId=org.exificient -DartifactId=exificient-core \
+          -Dversion=0.9.3 -Dpackaging=jar
+        
+        mvn install:install-file -Dfile=src/lib/jogl/jogl-all.jar \
+          -DgroupId=org.jogamp.jogl -DartifactId=jogl-all \
+          -Dversion=2.3.2 -Dpackaging=jar
+
+    - name: Build with Maven
+      run: mvn clean package
 
     - name: Package artifacts
       run: |
         mkdir artifact-bundle
-        cp -r target/lib artifact-bundle/lib
-        cp target/iDynoMiCS-2-2.0.jar artifact-bundle/
-        cp -r target/final-artifact/* artifact-bundle/
-        cd artifact-bundle && zip -r ../iDynoMiCS-bundle.zip . && cd ..
+        cp target/*-jar-with-dependencies.jar artifact-bundle/iDynoMiCS.jar
+        cp -r colourPalettes config protocol *.md artifact-bundle/
+        zip -r iDynoMiCS-bundle.zip artifact-bundle
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
