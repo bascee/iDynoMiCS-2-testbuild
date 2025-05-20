@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>idynomics</groupId>
+    <artifactId>iDynoMiCS</artifactId>
+    <version>2.0</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+
+    <build>
+         <sourceDirectory>src</sourceDirectory>
+         <testSourceDirectory>src/test</testSourceDirectory>
+        
+        <resources>
+            <!-- Include Java source files -->
+            <resource>
+                <directory>src</directory>
+                <includes>
+                    <include>**/*.java</include>
+                </includes>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <includes>
+                        <include>**/*.java</include>
+                    </includes>
+                </configuration>
+            </plugin>
+             <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-surefire-plugin</artifactId>
+               <version>3.2.5</version>
+               <configuration>
+                 <argLine>
+                   --add-exports java.base/java.lang=ALL-UNNAMED
+                   --add-exports java.desktop/sun.awt=ALL-UNNAMED
+                   --add-exports java.desktop/sun.java2d=ALL-UNNAMED
+                 </argLine>
+               </configuration>
+             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>idynomics.Idynomics</mainClass>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/jogl/</classpathPrefix>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <appendAssemblyId>false</appendAssemblyId>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <!-- Required Dependencies from src/lib -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.siemens.ct.exi</groupId>
+            <artifactId>exificient</artifactId>
+            <version>1.0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.optimization</groupId>
+            <artifactId>DasOptimization</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/lib/DasOptimization.jar</systemPath>
+        </dependency>
+        <!-- Existing Dependencies -->
+        <dependency>
+            <groupId>org.jogamp.jogl</groupId>
+            <artifactId>jogl-all</artifactId>
+            <version>2.3.2</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/lib/jogl/jogl-all.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.jogamp.gluegen</groupId>
+            <artifactId>gluegen-rt</artifactId>
+            <version>2.3.2</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/lib/jogl/gluegen-rt.jar</systemPath>
+        </dependency>
+         <!-- Windows Native Libraries -->
+         <dependency>
+             <groupId>org.jogamp.jogl</groupId>
+             <artifactId>jogl-all</artifactId>
+             <version>2.3.2</version>
+             <classifier>natives-windows-amd64</classifier>
+             <scope>system</scope>
+             <systemPath>${project.basedir}/src/lib/jogl/jogl-all-natives-windows-amd64.jar</systemPath>
+         </dependency>
+         <dependency>
+             <groupId>org.jogamp.gluegen</groupId>
+             <artifactId>gluegen-rt</artifactId>
+             <version>2.3.2</version>
+             <classifier>natives-windows-amd64</classifier>
+             <scope>system</scope>
+             <systemPath>${project.basedir}/src/lib/jogl/gluegen-rt-natives-windows-amd64.jar</systemPath>
+         </dependency>
+         
+         <!-- Linux Native Libraries -->
+         <dependency>
+             <groupId>org.jogamp.jogl</groupId>
+             <artifactId>jogl-all</artifactId>
+             <version>2.3.2</version>
+             <classifier>natives-linux-amd64</classifier>
+         </dependency>
+         <dependency>
+             <groupId>org.jogamp.gluegen</groupId>
+             <artifactId>gluegen-rt</artifactId>
+             <version>2.3.2</version>
+             <classifier>natives-linux-amd64</classifier>
+         </dependency>
+         <dependency>
+             <groupId>org.jogamp.jogl</groupId>
+             <artifactId>jogl-all</artifactId>
+             <version>2.3.2</version>
+             <classifier>natives-linux-aarch64</classifier>
+             <scope>system</scope>
+             <systemPath>${project.basedir}/src/lib/jogl/jogl-all-natives-linux-aarch64.jar</systemPath>
+         </dependency>
+         <dependency>
+             <groupId>org.jogamp.gluegen</groupId>
+             <artifactId>gluegen-rt</artifactId>
+             <version>2.3.2</version>
+             <classifier>natives-linux-aarch64</classifier>
+             <scope>system</scope>
+             <systemPath>${project.basedir}/src/lib/jogl/gluegen-rt-natives-linux-aarch64.jar</systemPath>
+         </dependency>
+         <dependency>
+             <groupId>org.jogamp.jogl</groupId>
+             <artifactId>jogl-all</artifactId>
+             <version>2.3.2</version>
+             <classifier>natives-linux-armv6hf</classifier>
+         </dependency>
+         
+         <!-- macOS Native Libraries -->
+         <dependency>
+             <groupId>org.jogamp.jogl</groupId>
+             <artifactId>jogl-all</artifactId>
+             <version>2.3.2</version>
+             <classifier>natives-macosx-universal</classifier>
+         </dependency>
+         <dependency>
+             <groupId>org.jogamp.gluegen</groupId>
+             <artifactId>gluegen-rt</artifactId>
+             <version>2.3.2</version>
+             <classifier>natives-macosx-universal</classifier>
+         </dependency>
+        <dependency>
+            <groupId>javax.vecmath</groupId>
+            <artifactId>vecmath</artifactId>
+            <version>1.5.2</version>
+        </dependency>
+    </dependencies>
+</project>
