@@ -52,9 +52,12 @@ jobs:
     - name: Build with Maven
       run: mvn clean package -DskipTests
 
-    - name: Verify JAR contents
+    - name: Package artifacts
       run: |
-        jar tf target/iDynoMiCS-2-2.0.jar | grep idynomics/Idynomics.class
+        mkdir -p artifact-bundle
+        cp target/*.jar artifact-bundle/
+        cp -r colourPalettes config protocol *.md artifact-bundle/
+        cd artifact-bundle && zip -r ../iDynoMiCS-bundle.zip . && cd ..
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
