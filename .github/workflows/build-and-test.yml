@@ -89,7 +89,7 @@ jobs:
 
     - name: Run ReactionDiffusionMgFasEcoli test
       run: |
-        mvn test -Dtest=test.junit.newTests.ReactionDiffusionMgFasEcoli
+        mvn -X test -Dtest=test.junit.newTests.ReactionDiffusionMgFasEcoli
 
     - name: Package artifacts
       run: |
