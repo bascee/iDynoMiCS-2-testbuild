@@ -109,7 +109,8 @@ jobs:
         name: iDynoMiCS-2
         path: artifact-bundle/
 
-  test:
+  simulate:
+    name: "iDynoMiCS-2 Simulation"
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -125,7 +126,7 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
 
-    - name: Run tests from artifact
+    - name: Run simulation from artifact
       working-directory: ./artifact-bundle  # Add this line
       run: |
         java --add-exports java.base/java.lang=ALL-UNNAMED \
