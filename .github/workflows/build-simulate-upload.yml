@@ -1,4 +1,4 @@
-name: Build, Simulate, and Upload iDyno-2
+name: Build, Simulate, Upload
 
 on:
   workflow_dispatch:
