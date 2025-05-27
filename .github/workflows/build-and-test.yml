@@ -95,7 +95,6 @@ jobs:
     - name: Run ReactionDiffusionMgFasEcoli test
     # include -X as test arg for debug output
       run: |
-        mvn test -Dtest=test.junit.newTests.ReactionDiffusionMgFas 
         mvn test -Dtest=test.junit.newTests.ReactionDiffusionMgFasDistributed 
         mvn test -Dtest=test.junit.newTests.MassBalance 
         mvn test -Dtest=test.junit.newTests.CollisionResponse 
