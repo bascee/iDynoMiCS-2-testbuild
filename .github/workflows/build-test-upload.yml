@@ -127,10 +127,9 @@ jobs:
         distribution: 'temurin'
 
     - name: Run tests from artifact
+      working-directory: ./artifact-bundle  # Add this line
       run: |
-        java -cp "artifact-bundle/*:artifact-bundle/lib/*" \
-          -Dconfig.file=classpath:default.cfg \
-          -Dprotocol.dir=classpath:/protocol \
+        java -cp "*:lib/*" \
           org.junit.runner.JUnitCore \
           test.junit.newTests.ReactionDiffusionMgFasDistributed \
           test.junit.newTests.MassBalance \
@@ -144,8 +143,8 @@ jobs:
       with:
         name: test-results
         path: |
-          target/surefire-reports/
-          target/failsafe-reports/
+          artifact-bundle/target/surefire-reports/
+          artifact-bundle/target/failsafe-reports/
 
   package:
     needs: [build, test]
