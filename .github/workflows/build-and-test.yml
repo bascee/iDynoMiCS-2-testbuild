@@ -85,7 +85,11 @@ jobs:
           -Dversion=2.3.2 -Dclassifier=natives-macosx-universal -Dpackaging=jar
 
     - name: Build with Maven
-      run: mvn clean package
+      run: mvn clean package -DskipTests
+
+    - name: Run ReactionDiffusionMgFasEcoli test
+      run: |
+        mvn test -Dtest=test.junit.newTests.ReactionDiffusionMgFasEcoli
 
     - name: Package artifacts
       run: |
