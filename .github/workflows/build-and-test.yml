@@ -35,6 +35,11 @@ jobs:
         # Install JUnit
         mvn install:install-file -Dfile=src/lib/JUnit/junit-4.13.2.jar \
           -DgroupId=junit -DartifactId=junit -Dversion=4.13.2 -Dpackaging=jar
+
+        # Install Hamcrest
+        mvn install:install-file -Dfile=src/lib/JUnit/hamcrest-core-2.2.jar \
+          -DgroupId=org.hamcrest -DartifactId=hamcrest-core \
+          -Dversion=2.2 -Dpackaging=jar
         
         # Install JOGL
         mvn install:install-file -Dfile=src/lib/jogl/jogl-all.jar \
