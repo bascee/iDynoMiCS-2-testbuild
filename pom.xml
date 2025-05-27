@@ -103,15 +103,11 @@
             <groupId>org.jogamp.jogl</groupId>
             <artifactId>jogl-all</artifactId>
             <version>2.3.2</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/lib/jogl/jogl-all.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.jogamp.gluegen</groupId>
             <artifactId>gluegen-rt</artifactId>
             <version>2.3.2</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/lib/jogl/gluegen-rt.jar</systemPath>
         </dependency>
          <!-- Windows Native Libraries -->
          <dependency>
