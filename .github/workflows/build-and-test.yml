@@ -135,7 +135,7 @@ jobs:
       - name: Run ${{ matrix.test-class }}
         working-directory: ./artifact-bundle
         run: |
-          mkdir -p logs
+          mkdir -p ./artifact-bundle/logs
           java -cp "*:lib/*" org.junit.runner.JUnitCore ${{ matrix.test-class }} 2>&1 | tee ./artifact-bundle/logs/console-${{ matrix.test-class }}.log
 
       - name: Upload results and console output
