@@ -94,7 +94,7 @@ jobs:
 
     - name: Run ReactionDiffusionMgFasEcoli test
       run: |
-        mvn test -Dtest=test.junit.newTests.ReactionDiffusionMgFasDistributedZeroBoundry
+        mvn -X test -Dtest=test.junit.newTests.ReactionDiffusionMgFasDistributedZeroBoundry
 
     - name: Package artifacts
       run: |
