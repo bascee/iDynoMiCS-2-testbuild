@@ -143,8 +143,7 @@ jobs:
       with:
         name: test-results
         path: |
-          artifact-bundle/target/surefire-reports/
-          artifact-bundle/target/failsafe-reports/
+          artifact-bundle/results/
 
   package:
     needs: [build, test]
