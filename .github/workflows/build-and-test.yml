@@ -1,4 +1,4 @@
-name: build iDyno
+name: build and test iDyno
 
 on:
   workflow_dispatch:
