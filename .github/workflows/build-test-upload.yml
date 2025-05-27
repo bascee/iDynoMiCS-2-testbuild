@@ -126,9 +126,11 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
 
-    - name: Run tests
+    - name: Run tests from artifact
       run: |
         java -cp "artifact-bundle/*:artifact-bundle/lib/*" \
+          -Dconfig.file=classpath:default.cfg \
+          -Dprotocol.dir=classpath:/protocol \
           org.junit.runner.JUnitCore \
           test.junit.newTests.ReactionDiffusionMgFasDistributed \
           test.junit.newTests.MassBalance \
