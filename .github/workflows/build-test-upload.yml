@@ -1,4 +1,4 @@
-name: Build, Test, and Package iDynoMiCS
+name: Build, Test, and Upload iDynoMiCS
 
 on:
   workflow_dispatch:
@@ -107,7 +107,7 @@ jobs:
     - name: Upload build artifact
       uses: actions/upload-artifact@v4
       with:
-        name: build-artifact
+        name: iDynoMiCS-2
         path: artifact-bundle/
 
   test:
@@ -117,7 +117,7 @@ jobs:
     - name: Download build artifact
       uses: actions/download-artifact@v4
       with:
-        name: build-artifact
+        name: iDynoMiCS-2
         path: artifact-bundle
 
     - name: Set up Java 11
@@ -137,46 +137,11 @@ jobs:
           test.junit.newTests.CollisionEvaluation \
           test.junit.newTests.AcidBaseTest3
 
-    - name: Upload test results
+    - name: Upload results
       uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: test-results
+        name: results
         path: |
           /home/runner/results
 
-  package:
-    needs: [build, test]
-    runs-on: ubuntu-latest
-    if: always()
-    steps:
-    - name: Download build artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: build-artifact
-        path: final-artifact
-
-    - name: Download test results
-      uses: actions/download-artifact@v4
-      with:
-        name: test-results
-        path: final-artifact/test-reports
-
-    - name: Create final package
-      run: |
-        cd final-artifact
-        zip -r ../iDynoMiCS-package-and-tests.zip ./*
-
-    - name: Upload final package
-      uses: actions/upload-artifact@v4
-      with:
-        name: iDynoMiCS-release
-        path: iDynoMiCS-full-package.zip
-
-    - name: Publish test report
-      uses: dorny/test-reporter@v2
-      if: always()
-      with:
-        name: Test Results
-        path: final-artifact/test-reports/*.xml
-        reporter: java-junit
