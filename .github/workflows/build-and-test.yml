@@ -92,12 +92,14 @@ jobs:
     - name: Build with Maven
       run: mvn clean package -DskipTests
 
-    - name: Package artifacts
+    - name: Create build artifact
+      id: package
       run: |
         mkdir -p artifact-bundle
         cp target/*.jar artifact-bundle/
         cp -r colourPalettes config protocol artifact-bundle/
         cp *.md *.MD *.TXT default.cfg artifact-bundle/ || true
+        echo "artifact=$(pwd)/artifact-bundle" >> $GITHUB_OUTPUT
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
