@@ -1,4 +1,4 @@
-name: Build, Test, and Upload iDynoMiCS
+name: Build, Test, and Upload
 
 on:
   workflow_dispatch:
