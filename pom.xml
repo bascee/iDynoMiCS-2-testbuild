@@ -49,29 +49,10 @@
                    --add-exports java.base/java.lang=ALL-UNNAMED
                    --add-exports java.desktop/sun.awt=ALL-UNNAMED
                    --add-exports java.desktop/sun.java2d=ALL-UNNAMED
+                   -Djava.library.path=${project.basedir}/src/lib/jogl
                  </argLine>
                </configuration>
              </plugin>
-         <plugin>
-           <groupId>org.codehaus.mojo</groupId>
-           <artifactId>build-helper-maven-plugin</artifactId>
-           <version>3.4.0</version>
-           <executions>
-             <execution>
-               <id>add-test-source</id>
-               <phase>generate-test-sources</phase>
-               <goals>
-                 <goal>add-test-source</goal>
-               </goals>
-               <configuration>
-                 <sources>
-                   <source>src/test</source>
-                   <source>src/test/junit</source>
-                 </sources>
-               </configuration>
-             </execution>
-           </executions>
-         </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
