@@ -135,4 +135,12 @@ jobs:
       - name: Run ${{ matrix.test-class }}
         working-directory: ./artifact-bundle
         run: |
-          java -cp "*:lib/*" org.junit.runner.JUnitCore ${{ matrix.test-class }}
+          java -cp "*:lib/*" org.junit.runner.JUnitCore ${{ matrix.test-class }} 2>&1 | tee ./artifact-bundle/logs/console-${{ matrix.test-class }}.log
+
+      - name: Upload results and console output
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: results-${{ matrix.test-class }}
+          path: |
+            ./artifact-bundle/logs/console-${{ matrix.test-class }}.log
