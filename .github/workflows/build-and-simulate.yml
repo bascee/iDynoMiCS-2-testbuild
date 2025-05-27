@@ -1,4 +1,4 @@
-name: Build, Simulate, Upload
+name: Build and simulate
 
 on:
   workflow_dispatch:
