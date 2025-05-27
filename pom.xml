@@ -93,13 +93,11 @@
             <artifactId>exificient</artifactId>
             <version>1.0.4</version>
         </dependency>
-        <dependency>
-            <groupId>org.optimization</groupId>
-            <artifactId>DasOptimization</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/lib/DasOptimization.jar</systemPath>
-        </dependency>
+         <dependency>
+             <groupId>org.optimization</groupId>
+             <artifactId>DasOptimization</artifactId>
+             <version>1.0</version>
+         </dependency>
         <!-- Existing Dependencies -->
         <dependency>
             <groupId>org.jogamp.jogl</groupId>
