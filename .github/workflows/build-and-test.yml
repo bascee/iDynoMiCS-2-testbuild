@@ -132,6 +132,10 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
+      - name: Prepare logs directory
+        working-directory: ./artifact-bundle
+        run: mkdir -p logs
+
       - name: Run ${{ matrix.test-class }}
         working-directory: ./artifact-bundle
         run: |
