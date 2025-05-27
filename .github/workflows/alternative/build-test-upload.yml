@@ -1,4 +1,4 @@
-name: Build, Test, and Upload
+name: Build, Test, and Upload (alternative)
 
 on:
   workflow_dispatch:
