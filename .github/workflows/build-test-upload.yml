@@ -99,7 +99,6 @@ jobs:
       run: |
         mkdir -p artifact-bundle
         cp target/*.jar artifact-bundle/
-        cp -r target/lib artifact-bundle/lib
         cp -r colourPalettes config protocol artifact-bundle/
         cp *.md *.MD *.TXT default.cfg artifact-bundle/ || true
         echo "artifact=$(pwd)/artifact-bundle" >> $GITHUB_OUTPUT
