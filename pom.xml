@@ -73,6 +73,17 @@
                           </artifactItems>
                         </configuration>
                       </execution>
+                           <execution>
+                            <id>copy-dependencies</id>
+                            <phase>package</phase> <!-- Runs during package phase -->
+                            <goals>
+                              <goal>copy-dependencies</goal>
+                            </goals>
+                            <configuration>
+                              <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                              <includeScope>runtime</includeScope>
+                            </configuration>
+                          </execution>
                     </executions>
                   </plugin>
                   <plugin>
