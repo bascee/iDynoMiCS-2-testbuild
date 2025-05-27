@@ -142,5 +142,4 @@ jobs:
       with:
         name: results
         path: |
-          /home/runner/results
-
+          ./artifact-bundle/results
