@@ -49,11 +49,21 @@
                    --add-exports java.base/java.lang=ALL-UNNAMED
                    --add-exports java.desktop/sun.awt=ALL-UNNAMED
                    --add-exports java.desktop/sun.java2d=ALL-UNNAMED
-                   -Djava.library.path=${project.basedir}/src/lib
-                 </argLine>
-               </configuration>
-             </plugin>
-            <plugin>
+                   -Djava.library.path=${project.basedir}/src/lib/jogl
+                        -Xmx2048m
+                        -XX:MaxPermSize=512m
+                      </argLine>
+                      <forkCount>1</forkCount>
+                      <reuseForks>true</reuseForks>
+                      <systemProperties>
+                        <property>
+                          <name>java.awt.headless</name>
+                          <value>false</value>
+                        </property>
+                      </systemProperties>
+                    </configuration>
+                  </plugin>
+             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.3.0</version>
