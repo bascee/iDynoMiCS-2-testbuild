@@ -27,7 +27,7 @@ protocol/Microcosm_XMLFiles
 classes/
 
 #inteliJ files
-.idea
+.idea/
 iDynoMiCS-2.iml
 
 #eclipse files
