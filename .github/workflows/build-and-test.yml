@@ -95,7 +95,7 @@ jobs:
     - name: Create build artifact
       id: package
       run: |
-        mkdir -p artifact-bundle
+        mkdir -p artifact-bundle/icons
         cp target/*.jar artifact-bundle/
         cp icons/*.ico artifact-bundle/icons/
         cp -r colourPalettes config protocol artifact-bundle/
