@@ -93,13 +93,13 @@ jobs:
       run: mvn clean package -DskipTests
 
     - name: Run ReactionDiffusionMgFasEcoli test
-    # include -X as test arg for debug output
       run: |
         mvn test -Dtest=test.junit.newTests.ReactionDiffusionMgFasDistributed 
         mvn test -Dtest=test.junit.newTests.MassBalance 
         mvn test -Dtest=test.junit.newTests.CollisionResponse 
         mvn test -Dtest=test.junit.newTests.CollisionEvaluation 
         mvn test -Dtest=test.junit.newTests.AcidBaseTest3 
+      # include -X as test arg for debug output
 
     - name: Package artifacts
       run: |

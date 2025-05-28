@@ -129,7 +129,7 @@ jobs:
         distribution: 'temurin'
 
     - name: Run simulation from artifact
-      working-directory: ./artifact-bundle  # Add this line
+      working-directory: ./artifact-bundle
       run: |
         java --add-exports java.base/java.lang=ALL-UNNAMED \
         --add-exports java.desktop/sun.awt=ALL-UNNAMED \
