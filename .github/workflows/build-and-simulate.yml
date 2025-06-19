@@ -7,7 +7,7 @@ on:
         description: 'Branch to use'
         required: true
         type: string
-        default: 'main'
+        default: 'develop'
       protocol_file:
         description: 'Protocol file (from protocol folder, e.g., simple.xml)'
         required: true
