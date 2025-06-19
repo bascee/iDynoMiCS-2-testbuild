@@ -1,4 +1,4 @@
-name: Build and Simulate
+name: Build and Test protocol
 
 on:
   workflow_dispatch:
@@ -142,7 +142,7 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
 
-    - name: Run simulation from artifact
+    - name: Run test simulation from artifact
       working-directory: ./artifact-bundle
       run: |
         java --add-exports java.base/java.lang=ALL-UNNAMED \
