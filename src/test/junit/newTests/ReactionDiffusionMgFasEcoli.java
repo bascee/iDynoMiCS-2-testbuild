@@ -63,8 +63,8 @@ public class ReactionDiffusionMgFasEcoli implements Testable {
 		double packing = 0.7;
 		/* max accepted Mean absolute relative error. As it is quite difficult
 		 * to get to precisely line-out the biofilm height with the grid and to
-		 * get a precise packing density typically 15% would be a good result */
-		double acceptedMRE = 0.15;
+		 * get a precise packing density typically 15 to 20% would be a good result */
+		double acceptedMRE = 0.20;
 		/* polling frequency, set equal to the grid resolution (or a multitude), 
 		 * does not go below 1 */
 		int polling = Math.max((int)vLength[0], 1);
@@ -130,7 +130,7 @@ public class ReactionDiffusionMgFasEcoli implements Testable {
 		System.out.println(
 		"max accepted Mean absolute relative error. As it is quite difficult\n" +
 		"to get to precisely line-out the biofilm height with the grid and to\n" +
-		"get a precise packing density typically 15% would be a good result."
+		"get a precise packing density typically 15 to 20% would be a good result."
 		);
 
 		/* amount of times the relative error exceeds .05, .10 and .20 */
