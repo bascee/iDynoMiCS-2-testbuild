@@ -122,6 +122,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false # prevent remaining tests to be canceled if one already failed.
       matrix:
         test-class: [
           'test.junit.newTests.ReactionDiffusionMgFasEcolis',
