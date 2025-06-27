@@ -124,7 +124,7 @@ jobs:
     strategy:
       matrix:
         test-class: [
-          'test.junit.newTests.ReactionDiffusionMgFasDistributedEcoli',
+          'test.junit.newTests.ReactionDiffusionMgFasEcolis',
           'test.junit.newTests.ReactionDiffusionMgFasDistributedZeroBoundry',
           'test.junit.newTests.ReactionDiffusionMgFasDistributed',
           'test.junit.newTests.ReactionDiffusionMgFas',
@@ -150,7 +150,14 @@ jobs:
         working-directory: ./artifact-bundle
         run: |
           mkdir -p logs
+          # Capture exit code and ensure failure propagation
+          set +e
           java -cp "*:lib/*" org.junit.runner.JUnitCore ${{ matrix.test-class }} 2>&1 | tee logs/console-${{ matrix.test-class }}.log
+          TEST_EXIT_CODE=${PIPESTATUS[0]}
+          if [ $TEST_EXIT_CODE -ne 0 ]; then
+            echo "::error::Test ${{ matrix.test-class }} failed with exit code $TEST_EXIT_CODE"
+            exit $TEST_EXIT_CODE
+          fi
 
       - name: Upload output
         uses: actions/upload-artifact@v4
