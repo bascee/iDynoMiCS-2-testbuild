@@ -125,7 +125,7 @@ jobs:
       fail-fast: false # prevent remaining tests to be canceled if one already failed.
       matrix:
         test-class: [
-          'test.junit.newTests.ReactionDiffusionMgFasEcolis',
+          'test.junit.newTests.ReactionDiffusionMgFasEcoli',
           'test.junit.newTests.ReactionDiffusionMgFasDistributedZeroBoundry',
           'test.junit.newTests.ReactionDiffusionMgFasDistributed',
           'test.junit.newTests.ReactionDiffusionMgFas',
