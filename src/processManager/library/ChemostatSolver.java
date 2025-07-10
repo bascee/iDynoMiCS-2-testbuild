@@ -404,13 +404,14 @@ public class ChemostatSolver extends ProcessManager
 							{
 								if ( a.isAspect( var ) )
 									reactionMap.put( var, a.getDouble( var) );
-								else if ( ! (soluteMap.containsKey( var ) || specialMap.containsKey( var )) )
+								else if ( ! (soluteMap.containsKey( var ) || specialMap.containsKey( var )) ) {
 									// We have this option in order to facilitate components that can play a role but
 									// may not yet exist at the start of a simulation, for example microbial storage
 									// compounds.
-									Log.out(Tier.CRITICAL , "Requested variable \"" + var +
+									Log.out(Tier.CRITICAL, "Requested variable \"" + var +
 											"\" is not (yet) defined, check the spelling, returning 0.0.");
-									reactionMap.put(var , 0.0);
+									reactionMap.put(var, 0.0);
+								}
 							}
 						
 						reactionMap.putAll( agentMap );						
