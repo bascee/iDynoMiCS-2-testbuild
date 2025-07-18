@@ -544,7 +544,15 @@ public class AgentContainer implements Settable
 
 	public void initLocatedAgentList()
 	{
-		this._locatedAgentList = this._agentTree.getAll(new ArrayList<Agent>());
+		List<Agent> agentsUnchecked = this._agentTree.getAll(new ArrayList<Agent>());
+
+		// We could consider doing this part in the tree itself for a slight efficiency boost, but it would make
+		// the tree specific to Agents instead of general working for any type of Java object
+		HashMap<Integer,Agent> agentMap = new HashMap<>();
+		for( Agent a : agentsUnchecked )
+			agentMap.put(a.identity(),a);
+		this._locatedAgentList = new ArrayList<>(agentMap.size());
+		this._locatedAgentList.addAll(agentMap.values());
 	}
 
 

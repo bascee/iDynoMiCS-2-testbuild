@@ -31,8 +31,11 @@ public class ResolveInteractionDistance extends Event
 								AspectInterface compliant, Double timeStep)
 	{
 		// NOTE currently they are added up not leveled
-		Double iDist = initiator.getDouble(AspectRef.agentPulldistance);
-		Double cDist = compliant.getDouble(AspectRef.agentPulldistance);
+		Double iDist = 0.0, cDist = 0.0;
+		if (initiator.isAspect(AspectRef.agentPulldistance))
+			iDist = initiator.getDouble(AspectRef.agentPulldistance);
+		if (compliant.isAspect(AspectRef.agentPulldistance))
+			cDist = compliant.getDouble(AspectRef.agentPulldistance);
 		
 //		// NOTE they are currently not added up
 //		if ( initiator.isAspect(PREF_DIST) )
@@ -78,7 +81,6 @@ public class ResolveInteractionDistance extends Event
 //			}
 //		}
 		
-		initiator.set(CURRENT_PULL_DIST, Helper.setIfNone(iDist, 0.0) + 
-				Helper.setIfNone(cDist, 0.0));
+		initiator.set(CURRENT_PULL_DIST, iDist + cDist);
 	}
 }
