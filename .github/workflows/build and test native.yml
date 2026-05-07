@@ -148,9 +148,14 @@ jobs:
         shell: bash
         run: |
           mkdir -p artifact-bundle/icons
-          # Copy native binary (with or without .exe suffix)
+          # Copy the native binary
           cp target/iDynoMiCS-2${{ matrix.executable-suffix }} artifact-bundle/ || \
-            cp target/*${{ matrix.executable-suffix }} artifact-bundle/
+          cp target/*${{ matrix.executable-suffix }} artifact-bundle/
+          # Copy companion native libraries emitted by native-image (Linux/macOS)
+          cp target/*.so artifact-bundle/ 2>/dev/null || true
+          cp target/*.dylib artifact-bundle/ 2>/dev/null || true
+          cp target/*.dll artifact-bundle/ 2>/dev/null || true
+          # Rest of your files...
           cp icons/*.ico artifact-bundle/icons/ 2>/dev/null || true
           cp icons/iDynoMiCS_logo_icon.png artifact-bundle/icons/ 2>/dev/null || true
           cp -r colourPalettes config protocol artifact-bundle/ 2>/dev/null || true
