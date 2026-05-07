@@ -253,16 +253,7 @@
                                         <buildArg>--add-exports=java.desktop/sun.awt=ALL-UNNAMED</buildArg>
                                         <buildArg>--add-exports=java.desktop/sun.java2d=ALL-UNNAMED</buildArg>
                                         <buildArg>-Djava.awt.headless=false</buildArg>
-                                    
-                                        <!-- Defer all AWT/JOGL/app initialization to runtime -->
-                                        <buildArg>--initialize-at-run-time=\
-                                            java.awt,\
-                                            sun.awt,\
-                                            sun.java2d,\
-                                            sun.font,\
-                                            com.jogamp,\
-                                            idynomics.Global,\
-                                            utility.Helper</buildArg>
+                                        <buildArg>--initialize-at-run-time=java.awt,sun.awt,sun.java2d,sun.font,com.jogamp,idynomics.Global,utility.Helper</buildArg>
                                         <buildArg>--no-fallback</buildArg>
                                         <buildArg>-H:+ReportExceptionStackTraces</buildArg>
                                         <buildArg>-J-Xmx7g</buildArg>
