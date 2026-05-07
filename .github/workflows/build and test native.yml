@@ -36,7 +36,14 @@ jobs:
         with:
           ref: ${{ github.event.inputs.branch || github.ref }}
 
-      # GraalVM replaces setup-java for native builds
+      - name: Configure pagefile (Windows only)
+        if: runner.os == 'Windows'
+        uses: al-cheb/configure-pagefile-action@v1.4
+        with:
+          minimum-size: 10GB
+          maximum-size: 12GB
+          disk-root: "C:"
+
       - name: Set up GraalVM 21
         uses: graalvm/setup-graalvm@v1
         with:
@@ -45,13 +52,12 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           native-image-job-reports: 'true'
 
-      # Windows: configure pagefile to prevent OOM during native-image compilation
-      - name: Configure pagefile (Windows only)
+      # Initializes MSVC x64 environment for native-image.cmd
+      - name: Initialize MSVC (Windows only)
         if: runner.os == 'Windows'
-        uses: al-cheb/configure-pagefile-action@v1.4
+        uses: ilammy/msvc-dev-cmd@v1
         with:
-          minimum-size: 10GB
-          maximum-size: 12GB
+          arch: x64
 
       - name: Install local dependencies
         shell: bash
@@ -125,15 +131,18 @@ jobs:
             -DgroupId=org.jogamp.gluegen -DartifactId=gluegen-rt \
             -Dversion=2.3.2 -Dclassifier=natives-macosx-universal -Dpackaging=jar
 
-      - name: Build native image with Maven
+      - name: Build native image
         shell: bash
         run: |
-          mvn -Pnative package -DskipTests \
+          mvn -Pnative package -DskipTests -e \
             -Dnative.image.buildArgs="--add-exports java.base/java.lang=ALL-UNNAMED \
               --add-exports java.desktop/sun.awt=ALL-UNNAMED \
               --add-exports java.desktop/sun.java2d=ALL-UNNAMED \
               --no-fallback \
-              -J-Xmx8g"
+              --report-unsupported-elements-at-runtime \
+              --initialize-at-run-time=com.jogamp.opengl,com.jogamp.gluegen \
+              -H:+ReportExceptionStackTraces \
+              -J-Xmx7g"
 
       - name: Collect artifacts
         shell: bash
