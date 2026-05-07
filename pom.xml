@@ -249,6 +249,9 @@
                             <mainClass>idynomics.Idynomics</mainClass>
                             <fallback>false</fallback>
                             <buildArgs>
+                                <buildArg>--report-unsupported-elements-at-runtime</buildArg>
+                                <buildArg>-H:+ReportExceptionStackTraces</buildArg>
+                                <buildArg>--initialize-at-run-time=com.jogamp.opengl,com.jogamp.gluegen</buildArg>
                                 <buildArg>--add-exports=java.base/java.lang=ALL-UNNAMED</buildArg>
                                 <buildArg>--add-exports=java.desktop/sun.awt=ALL-UNNAMED</buildArg>
                                 <buildArg>--add-exports=java.desktop/sun.java2d=ALL-UNNAMED</buildArg>
